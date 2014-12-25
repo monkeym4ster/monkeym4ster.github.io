@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title><![CDATA[M4ster's blog]]></title>
-  <subtitle><![CDATA[know it then hack it]]></subtitle>
+  <subtitle><![CDATA[分享学习和生活中的点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://m4ster.net/"/>
-  <updated>2014-12-24T08:42:23.102Z</updated>
+  <updated>2014-12-25T04:20:55.650Z</updated>
   <id>http://m4ster.net/</id>
   
   <author>
