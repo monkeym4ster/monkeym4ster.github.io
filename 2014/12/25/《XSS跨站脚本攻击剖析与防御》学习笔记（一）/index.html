@@ -1,0 +1,428 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>《XSS跨站脚本攻击剖析与防御》学习笔记（一） | M4ster&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="M4ster">
+    
+    <meta name="description" content="跨站脚本介绍
+XSS自1996年诞生以来，如今已经过十余年的演化。随着Web技术的蓬勃发展，XSS无疑已经变成了最流行和严重的Web安全漏洞，更被OWASP（Open Web Application Security Project）组织评为十大安全漏洞中的第二威胁漏洞。
+什么是XSS跨站脚本
+跨站">
+    
+    
+    
+    
+    <link rel="alternate" href="atom.xml" title="M4ster&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="M4ster&#39;s blog" title="M4ster&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="M4ster&#39;s blog">M4ster&#39;s blog</a></h1>
+				<h2 class="blog-motto">分享学习和生活中的点滴</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">存档</a></li>
+					
+						<li><a href="/test">测试</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:www.m4ster.net">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（一）/" title="《XSS跨站脚本攻击剖析与防御》学习笔记（一）" itemprop="url">《XSS跨站脚本攻击剖析与防御》学习笔记（一）</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://www.m4ster.net" title="M4ster">M4ster</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-12-25T07:03:03.000Z" itemprop="datePublished">2014年12月25日</time>
+    更新日期:<time datetime="2014-12-25T08:41:57.000Z" itemprop="dateModified">2014年12月25日</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#跨站脚本介绍"><span class="toc-number">1.</span> <span class="toc-text">跨站脚本介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是XSS跨站脚本"><span class="toc-number">1.1.</span> <span class="toc-text">什么是XSS跨站脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么XSS跨站漏洞会如此流行"><span class="toc-number">1.2.</span> <span class="toc-text">为什么XSS跨站漏洞会如此流行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS跨站脚本实例"><span class="toc-number">1.3.</span> <span class="toc-text">XSS跨站脚本实例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞的成因"><span class="toc-number">1.3.1.</span> <span class="toc-text">漏洞的成因</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#利用方法演示"><span class="toc-number">1.3.2.</span> <span class="toc-text">利用方法演示</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#攻击原理具体说明"><span class="toc-number">1.3.3.</span> <span class="toc-text">攻击原理具体说明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对于Web安全的威胁"><span class="toc-number">2.</span> <span class="toc-text">对于Web安全的威胁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可能带来的危害总结"><span class="toc-number">2.1.</span> <span class="toc-text">可能带来的危害总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS的分类"><span class="toc-number">3.</span> <span class="toc-text">XSS的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#反射型XSS"><span class="toc-number">3.1.</span> <span class="toc-text">反射型XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#介绍"><span class="toc-number">3.1.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#攻击手法"><span class="toc-number">3.1.2.</span> <span class="toc-text">攻击手法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#特点"><span class="toc-number">3.1.3.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#危害"><span class="toc-number">3.1.4.</span> <span class="toc-text">危害</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#持久型XSS"><span class="toc-number">3.2.</span> <span class="toc-text">持久型XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#介绍-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#攻击手法-1"><span class="toc-number">3.2.2.</span> <span class="toc-text">攻击手法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#特点-1"><span class="toc-number">3.2.3.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#危害-1"><span class="toc-number">3.2.4.</span> <span class="toc-text">危害</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">3.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+		</div>
+		
+		<h2 id="跨站脚本介绍">跨站脚本介绍</h2>
+<p>XSS自1996年诞生以来，如今已经过十余年的演化。随着Web技术的蓬勃发展，XSS无疑已经变成了最流行和严重的Web安全漏洞，更被OWASP（<code>Open Web Application Security Project</code>）组织评为十大安全漏洞中的第二威胁漏洞。</p>
+<h3 id="什么是XSS跨站脚本">什么是XSS跨站脚本</h3>
+<p>跨站脚本（<code>Cross-Site Scripting,XSS</code>）是一种常见的Web应用程序中的计算安全漏洞。是由于Web应用对于用户的输入过滤不足而产生的。攻击者可以利用网站的漏洞把恶意脚本代码注入到网页之中，当其他用户浏览这些网页的时候，就会执行其中的恶意代码。</p>
+<p>由于和另外一种网页技术——层叠样式表（<code>Cascading Style Sheets,CSS</code>）的缩写一样，为了防止混肴，故把原本的CSS简称为XSS。</p>
+<p>我们通常把XSS脚本攻击理解为一种Web安全漏洞，也可以理解为一种攻击手段。</p>
+<h3 id="为什么XSS跨站漏洞会如此流行">为什么XSS跨站漏洞会如此流行</h3>
+<ul>
+<li>Web浏览器本身的设计是不安全的。浏览器只会执行，不会判断数据和程序代码是否恶意。</li>
+<li>输入和输出是Web应用程序最基本的交互，在这过程之中如果没有做好安全防护，Web程序很容易出现XSS漏洞</li>
+<li>Web应用程序通常是通过团队合作来完成的，程序员之间的水平参差不齐，很少人受过正规的安全培训（<code>木桶原理</code>）</li>
+<li>开发人员和安全工程师不够重视此类漏洞</li>
+<li>XSS技术的运用灵活多变，防御起来较为困难</li>
+<li>……</li>
+</ul>
+<h3 id="XSS跨站脚本实例">XSS跨站脚本实例</h3>
+<h4 id="漏洞的成因">漏洞的成因</h4>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">head</span>&gt;</span>test<span class="tag">&lt;/<span class="title">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">alert(<span class="string">"XSS"</span>)</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="title">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="title">html</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>HTML中的script元素标记中间包含javascript，浏览器调用脚本引擎处理。XSS攻击就是将非法的JavaScript、VBscript等脚本注入到用户浏览的网页上执行。</p>
+<h4 id="利用方法演示">利用方法演示</h4>
+<p>利用XSS弹出恶意警告框，代码为：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">scirpt</span>&gt;</span>alert("XSS")<span class="tag">&lt;/<span class="title">script</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>XSS输入也可能是HTML代码段，如要使网页不停的刷新，代码为：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"refresh"</span> <span class="attribute">content</span>=<span class="value">"0;"</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>嵌入其他网站的链接，代码为：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">iframe</span> <span class="attribute">src</span>=<span class="value">http:</span>//<span class="attribute">www.test.com</span> <span class="attribute">width</span>=<span class="value">0</span> <span class="attribute">height</span>=<span class="value">0</span>&gt;</span><span class="tag">&lt;/<span class="title">iframe</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<h4 id="攻击原理具体说明">攻击原理具体说明</h4>
+<p>写一个PHP脚本，脚本代码为：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">&lt;?</span></div><div class="line">    <span class="keyword">echo</span> <span class="variable">$_REQUEST</span>[<span class="string">'name'</span>];</div><div class="line"><span class="preprocessor">?&gt;</span></div></pre></td></tr></table></figure>
+
+<p>以上代码使用<code>$_REQUEST[&#39;name&#39;]</code>来获取用户输入的name的值，然后直接echo输出。<br>当用户提交参数为<code>demo.php?name=test</code>时，页面直接输出<code>test</code>，当用户提交的参数为<code>demo.php?name=&lt;script&gt;alert(/XSS/)&lt;/script&gt;</code>时，页面中的JS代码被脚本引擎解析，弹出了内容为<code>/XSS/</code>的警告框。<br>由于PHP网页直接输出了我们的测试代码，从而导致一个XSS的生成。</p>
+<h2 id="对于Web安全的威胁">对于Web安全的威胁</h2>
+<p>以往，XSS跨站脚本一直被当作是一类鸡肋的漏洞，没有什么好利用的地方，只能弹出对话框而已，稍微有点危害的就是用来盗取用户Cookies资料和网页挂马。</p>
+<p>通常情况下，攻击者通过注入如<code>alert(/XSS/)</code>之类的JS代码来证明XSS，该代码能够导致应用程序弹出带有XSS字样的窗口。从技术角度来说，这种示例确实能够证明XSS漏洞的存在性，但是并没有真实的反映其危害型。</p>
+<p>最近几年很多人投入了XSS技术的研究，世界上的第一个跨站脚本蠕虫（<code>XSS Worm</code>）Samy，于2005年10月在国外诞生，并在20小时内迅速感染了100多万个用户，最终导致该网站瘫痪。</p>
+<p>而且，许多基于XSS的攻击框架大量涌现，如国外知名的BeFF、XSS Shell、attackAPI；国内的Anehta、XSSER.ME等。  </p>
+<p>如今，只要一个站点存在跨站脚本漏洞，该站点的所有用户都可能受到危害。黑客一旦挖掘到XSS漏洞，就可以利用该漏洞实施回话劫持、资料窃取、渗透入侵和传播蠕虫病毒等一系列攻击。</p>
+<h3 id="可能带来的危害总结">可能带来的危害总结</h3>
+<ul>
+<li>网络钓鱼，包括盗取各类用户帐号</li>
+<li>窃取用户cookies资料</li>
+<li>劫持用户（浏览器）会话，从而执行任意操作，例如非法转账、强制发表日志、发送电子邮件等</li>
+<li>强制弹出广告页面、刷流量等</li>
+<li>网页挂马</li>
+<li>进行大量的客户端攻击，如DDos攻击</li>
+<li>获取客户端信息，如浏览历史、真实IP、开放端口等</li>
+<li>结合其他漏洞，如CSRF漏洞，实施进一步作恶</li>
+<li>传播跨站蠕虫脚本等</li>
+<li>……</li>
+</ul>
+<h2 id="XSS的分类">XSS的分类</h2>
+<p>XSS根据其特型和利用手法的不同，主要分为两大类型：反射型和持久型</p>
+<h3 id="反射型XSS">反射型XSS</h3>
+<h4 id="介绍">介绍</h4>
+<p>反射型跨站脚本也称为非持久型、参数型跨站脚本。主要用于将恶意脚本附加到URL地址的参数中，例如：<br><code>http://www.test.com/search.php?key=&quot;&gt;&lt;script&gt;alert(/XSS/)&lt;/script&gt;</code><br><code>http://www.test.com/help.shtml?query=%3Cscript%3Ealert%28/XSS/%29%3C/script%3E</code><br><code>http://www.test.com/logout.asp?out=1&amp;url=javascript:alert(/XSS/)</code>  </p>
+<h4 id="攻击手法">攻击手法</h4>
+<p>通常是使用特定的手法（<code>比如利用电子邮件</code>），诱使用户去访问一个包含恶意代码的URL，当用户点击这些专门设计的链接的时候，恶意的JS代码会直接在用户浏览器上执行。</p>
+<h4 id="特点">特点</h4>
+<p>反射型XSS的特点是：只在用户单击的时候触发，而且只执行一次，非持久化，所以称为反射型跨站脚本。  </p>
+<h4 id="危害">危害</h4>
+<p>反射型XSS的危害往往不如持久型XSS，因为恶意代码暴露在URL参数当中，并时刻要求用户单击方可触发，稍微有点安全意识的用户可以轻易看穿该链接是不可信任的。如此一来，反射型XSS的攻击成本要比持久型XSS高许多。<br>但，黑客在发动跨站脚本攻击前会精心布置一切，如恶意URL暴露的问题，可以通过各种编码的转换来解决。</p>
+<h3 id="持久型XSS">持久型XSS</h3>
+<h4 id="介绍-1">介绍</h4>
+<p>持久型跨站脚本也等于存储型跨站脚本，比反射型跨站脚本更具有威胁性，并且可能影响 到Web服务器自身的安全。</p>
+<h4 id="攻击手法-1">攻击手法</h4>
+<p>此类XSS不需要用户单击特定URL，攻击者只需要事先将恶意JS代码上传或存储到漏洞服务器中，只要受害者浏览包含此恶意JS代码的页面就会执行恶意代码。</p>
+<h4 id="特点-1">特点</h4>
+<p>持久型XSS通常出现在网站的留言、评论、博客日志等交互处，恶意脚本被存储到客户端或者服务器的数据库中，当其他用户浏览该网页时，站点即从数据库中读取恶意用户存入的非法代码，然后显示在页面当中，即在受害者的主机上的浏览器执行此恶意代码。</p>
+<h4 id="危害-1">危害</h4>
+<p>持久型XSS不需要用户去单击链接就能除非，所以它的危害比反射型XSS要大。<br>更严重的是，利用此类XSS能够轻易编写危害性更大的XSS蠕虫，跨站蠕虫是使用Ajax/JavaScript语言编写的蠕虫病毒，能够在网站中实现病毒的迅速传播。XSS蠕虫会直接影响网站的所有用户。  </p>
+<h3 id="总结">总结</h3>
+<p>XSS攻击作为Web业务的一大威胁，危害的不仅仅是Web业务本身，对使用Web服务的用户也会造成直接的影响。<br>所以，要谨记一点：无论是反射型XSS还是持久型XSS，都具备一定程度的危害性！Web开发人员不应该忽略应用程序中的任何漏洞，因为这些潜在的问题都可能给网站和用户带来无法想象的影响和危害。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/XSS/">XSS</a><a href="/tags/跨站攻击/">跨站攻击</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://www.m4ster.net/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（一）/" data-title="《XSS跨站脚本攻击剖析与防御》学习笔记（一） | M4ster&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（前言）/"  title="《XSS跨站脚本攻击剖析与防御》学习笔记（前言）">
+ <strong>NEXT:</strong><br/> 
+ <span>《XSS跨站脚本攻击剖析与防御》学习笔记（前言）
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#跨站脚本介绍"><span class="toc-number">1.</span> <span class="toc-text">跨站脚本介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是XSS跨站脚本"><span class="toc-number">1.1.</span> <span class="toc-text">什么是XSS跨站脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么XSS跨站漏洞会如此流行"><span class="toc-number">1.2.</span> <span class="toc-text">为什么XSS跨站漏洞会如此流行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS跨站脚本实例"><span class="toc-number">1.3.</span> <span class="toc-text">XSS跨站脚本实例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞的成因"><span class="toc-number">1.3.1.</span> <span class="toc-text">漏洞的成因</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#利用方法演示"><span class="toc-number">1.3.2.</span> <span class="toc-text">利用方法演示</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#攻击原理具体说明"><span class="toc-number">1.3.3.</span> <span class="toc-text">攻击原理具体说明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对于Web安全的威胁"><span class="toc-number">2.</span> <span class="toc-text">对于Web安全的威胁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可能带来的危害总结"><span class="toc-number">2.1.</span> <span class="toc-text">可能带来的危害总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS的分类"><span class="toc-number">3.</span> <span class="toc-text">XSS的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#反射型XSS"><span class="toc-number">3.1.</span> <span class="toc-text">反射型XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#介绍"><span class="toc-number">3.1.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#攻击手法"><span class="toc-number">3.1.2.</span> <span class="toc-text">攻击手法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#特点"><span class="toc-number">3.1.3.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#危害"><span class="toc-number">3.1.4.</span> <span class="toc-text">危害</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#持久型XSS"><span class="toc-number">3.2.</span> <span class="toc-text">持久型XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#介绍-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#攻击手法-1"><span class="toc-number">3.2.2.</span> <span class="toc-text">攻击手法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#特点-1"><span class="toc-number">3.2.3.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#危害-1"><span class="toc-number">3.2.4.</span> <span class="toc-text">危害</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">3.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/blog/" title="blog">blog<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/XSS/" title="XSS">XSS<sup>2</sup></a></li>
+		
+			<li><a href="/tags/hello-world/" title="hello world">hello world<sup>1</sup></a></li>
+		
+			<li><a href="/tags/博客/" title="博客">博客<sup>1</sup></a></li>
+		
+			<li><a href="/tags/文章/" title="文章">文章<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/跨站攻击/" title="跨站攻击">跨站攻击<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://yangjian.me" target="_blank" title="YangJian">Alimon's Blog</a></li>
+      <li><a href="http://hexo.io" target="_blank" title="Hexo">Hexo</a></li>
+      <li><a href="http://sqzr.cc" target="_blank" title="sqzr">sqzr's blog</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m M4ster. <br/>
+			This is my blog i&#39;d like to share with you at this blog.</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/m4ster" target="_blank" title="weibo"></a>
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://www.m4ster.net" target="_blank" title="M4ster">M4ster</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"m4ster"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
