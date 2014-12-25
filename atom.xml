@@ -4,7 +4,7 @@
   <subtitle><![CDATA[分享学习和生活中的点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.m4ster.net/"/>
-  <updated>2014-12-25T09:39:51.054Z</updated>
+  <updated>2014-12-25T09:41:56.626Z</updated>
   <id>http://www.m4ster.net/</id>
   
   <author>
@@ -116,7 +116,7 @@
     <link href="http://www.m4ster.net/2014/12/25/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%89%8D%E8%A8%80%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（前言）/</id>
     <published>2014-12-25T06:32:28.000Z</published>
-    <updated>2014-12-25T07:03:42.000Z</updated>
+    <updated>2014-12-25T09:41:48.000Z</updated>
     <content type="html"><![CDATA[<h2 id="前言">前言</h2>
 <p>近来在学习《XSS跨站脚本攻击剖析与防御》这本书，此书从XSS的基础攻击原理、危害以及一些常用的利用/防御的技巧再到高级利用方式衍生到Web 2.0的最大威胁——跨站脚本蠕虫，由浅入深的阐释了XSS对于网络安全意味着什么。在这里和大家分享下我的学习心得和知识的总结。</p>
 <h3 id="XSS是什么">XSS是什么</h3>
@@ -153,6 +153,8 @@
       <category term="XSS" scheme="http://www.m4ster.net/tags/XSS/"/>
     
       <category term="跨站攻击" scheme="http://www.m4ster.net/tags/%E8%B7%A8%E7%AB%99%E6%94%BB%E5%87%BB/"/>
+    
+      <category term="读书笔记" scheme="http://www.m4ster.net/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
