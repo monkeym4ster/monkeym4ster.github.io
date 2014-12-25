@@ -4,7 +4,7 @@
   <subtitle><![CDATA[分享学习和生活中的点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.m4ster.net/"/>
-  <updated>2014-12-25T09:41:56.626Z</updated>
+  <updated>2014-12-25T12:46:26.200Z</updated>
   <id>http://www.m4ster.net/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://www.m4ster.net/2014/12/25/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（一）/</id>
     <published>2014-12-25T07:03:03.000Z</published>
-    <updated>2014-12-25T08:49:18.000Z</updated>
+    <updated>2014-12-25T12:46:20.000Z</updated>
     <content type="html"><![CDATA[<h2 id="跨站脚本介绍">跨站脚本介绍</h2>
 <p>XSS自1996年诞生以来，如今已经过十余年的演化。随着Web技术的蓬勃发展，XSS无疑已经变成了最流行和严重的Web安全漏洞，更被OWASP（<code>Open Web Application Security Project</code>）组织评为十大安全漏洞中的第二威胁漏洞。</p>
 <h3 id="什么是XSS跨站脚本">什么是XSS跨站脚本</h3>
@@ -97,6 +97,14 @@
 <h3 id="总结">总结</h3>
 <p>XSS攻击作为Web业务的一大威胁，危害的不仅仅是Web业务本身，对使用Web服务的用户也会造成直接的影响。<br>所以，要谨记一点：无论是反射型XSS还是持久型XSS，都具备一定程度的危害性！Web开发人员不应该忽略应用程序中的任何漏洞，因为这些潜在的问题都可能给网站和用户带来无法想象的影响和危害。</p>
 <h2 id="XSS的简单挖掘">XSS的简单挖掘</h2>
+<h3 id="挖掘的方法">挖掘的方法</h3>
+<p>进行漏洞挖掘的方法有几种，推荐使用的是灰盒测试。什么是灰盒测试？要理解此概念首先需要理解黑盒测试和白盒测试。所谓的白盒测试，是指知道程序内部的结构，也就是获取源代码的情况下对软件进行测试；黑盒则完全相反；而灰盒测试介于两者之间。</p>
+<h3 id="挖掘反射型XSS">挖掘反射型XSS</h3>
+<blockquote>
+<p>数据交互（即输入/输出）的地方最容易产生XSS漏洞</p>
+</blockquote>
+<p>我们可以着重对网站的输入框、URL参数处进行测试。当然，所有来自COOKIE、POST表单、HTTP头的内容都可能会产生XSS</p>
+<h3 id="挖掘存储型XSS">挖掘存储型XSS</h3>
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="跨站脚本介绍">跨站脚本介绍</h2>
