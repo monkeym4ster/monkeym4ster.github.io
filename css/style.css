@@ -2060,13 +2060,16 @@ pre .xml .cdata {
 }
 .ds-avatar img {
   width: 32px !important;
+  height: 32px !important;
+  border: 2px solid #dbdbdb !important;
+  -webkit-border-radius: 27px !important;
+  border-radius: 27px !important;
+  -webkit-transition: -webkit-transform 0.5s ease-out !important;
+  -moz-transition: -moz-transform 0.5s ease-out !important;
+  -o-transition: -o-transform 0.5s ease-out !important;
+  -ms-transition: -ms-transform 0.5s ease-out !important;
+  transition: transform 0.5s ease-out !important;
 }
-.ds-avatar img #原为54px,
-.ds-avatar img height 32px,
-.ds-avatar img border 2px solid lighten(color-gray,
-.ds-avatar img 30%),
-.ds-avatar img border-radius 27px,
-.ds-avatar img transition transform .5s ease-out,
 .ds-avatar img:hover {
   -webkit-transform: rotateZ(360deg) !important;
   -moz-transform: rotateZ(360deg) !important;
