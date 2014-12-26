@@ -81,7 +81,7 @@ XSS自1996年诞生以来，如今已经过十余年的演化。随着Web技术�
     </p>
   <p class="article-time">
     <time datetime="2014-12-25T07:03:03.000Z" itemprop="datePublished">2014年12月25日</time>
-    更新日期:<time datetime="2014-12-25T13:53:18.000Z" itemprop="dateModified">2014年12月25日</time>
+    更新日期:<time datetime="2014-12-26T07:57:17.000Z" itemprop="dateModified">2014年12月26日</time>
     
   </p>
 </header>
@@ -115,14 +115,17 @@ XSS自1996年诞生以来，如今已经过十余年的演化。随着Web技术�
 <p>HTML中的script元素标记中间包含javascript，浏览器调用脚本引擎处理。XSS攻击就是将非法的JavaScript、VBscript等脚本注入到用户浏览的网页上执行。</p>
 <h4 id="利用方法演示">利用方法演示</h4>
 <p>利用XSS弹出恶意警告框，代码为：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">scirpt</span>&gt;</span>alert("XSS")<span class="tag">&lt;/<span class="title">script</span>&gt;</span></div></pre></td></tr></table></figure>
-
+<blockquote>
+<p><code>&lt;scirpt&gt;alert(&quot;XSS&quot;)&lt;/script&gt;</code></p>
+</blockquote>
 <p>XSS输入也可能是HTML代码段，如要使网页不停的刷新，代码为：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"refresh"</span> <span class="attribute">content</span>=<span class="value">"0;"</span>&gt;</span></div></pre></td></tr></table></figure>
-
+<blockquote>
+<p><code>&lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;&quot;&gt;</code></p>
+</blockquote>
 <p>嵌入其他网站的链接，代码为：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">iframe</span> <span class="attribute">src</span>=<span class="value">http:</span>//<span class="attribute">www.test.com</span> <span class="attribute">width</span>=<span class="value">0</span> <span class="attribute">height</span>=<span class="value">0</span>&gt;</span><span class="tag">&lt;/<span class="title">iframe</span>&gt;</span></div></pre></td></tr></table></figure>
-
+<blockquote>
+<p><code>&lt;iframe src=http://www.test.com width=0 height=0&gt;&lt;/iframe&gt;</code></p>
+</blockquote>
 <h4 id="攻击原理具体说明">攻击原理具体说明</h4>
 <p>写一个PHP脚本，脚本代码为：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">&lt;?php</span></div><div class="line">    <span class="keyword">echo</span> <span class="variable">$_REQUEST</span>[<span class="string">'name'</span>];</div><div class="line"><span class="preprocessor">?&gt;</span></div></pre></td></tr></table></figure>
@@ -262,7 +265,7 @@ XSS自1996年诞生以来，如今已经过十余年的演化。随着Web技术�
 		
 			<li><a href="/categories/脚本语言/" title="脚本语言">脚本语言<sup>1</sup></a></li>
 		
-			<li><a href="/categories/读书笔记/" title="读书笔记">读书笔记<sup>2</sup></a></li>
+			<li><a href="/categories/读书笔记/" title="读书笔记">读书笔记<sup>3</sup></a></li>
 		
 		</ul>
 </div>
@@ -273,9 +276,9 @@ XSS自1996年诞生以来，如今已经过十余年的演化。随着Web技术�
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/XSS/" title="XSS">XSS<sup>3</sup></a></li>
+			<li><a href="/tags/XSS/" title="XSS">XSS<sup>4</sup></a></li>
 		
-			<li><a href="/tags/跨站攻击/" title="跨站攻击">跨站攻击<sup>3</sup></a></li>
+			<li><a href="/tags/跨站攻击/" title="跨站攻击">跨站攻击<sup>4</sup></a></li>
 		
 		</ul>
 </div>
