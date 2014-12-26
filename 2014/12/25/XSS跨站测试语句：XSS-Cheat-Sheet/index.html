@@ -142,7 +142,7 @@ XSS语句列表罗列了各种各样的XSS代码，这些XSS代码在不同的�
 
 	
 <section class="comment">
-	<div class="ds-thread"></div>
+	<div class="ds-thread" data-title="XSS跨站测试语句：XSS Cheat Sheet" data-url="/2014/12/25/XSS跨站测试语句：XSS-Cheat-Sheet/"></div>
 </section>
 
 </div>  
@@ -193,12 +193,13 @@ XSS语句列表罗列了各种各样的XSS代码，这些XSS代码在不同的�
 
 
   
-<div class="tagslist asidetitle">
-	<h3 class="widget-title">最新评论</h3>
-	<div class="widget">
-	  <div class="ds-recent-comments" data-num-items="10" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+  <div class="widget-wrap">
+    <p class="asidetitle">最近评论</p>
+    <div class="widget">
+	  <div class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
 	</div>
-</div>
+  </div>
+
 
 
   <div class="linkslist">
@@ -220,18 +221,19 @@ XSS语句列表罗列了各种各样的XSS代码，这些XSS代码在不同的�
 </div>
     </div>
     <footer>
-<!--多说js加载开始，一个页面只需要加载一次 -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"m4ster"};
-(function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = 'http://static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-})();
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
 </script>
-<!--多说js加载结束，一个页面只需要加载一次 -->
+<!-- 多说公共JS代码 end -->
 <div id="footer" >
 	
 	<div class="line">
