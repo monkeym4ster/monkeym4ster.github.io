@@ -4,15 +4,15 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>《XSS跨站脚本攻击剖析与防御》学习笔记（前言） | M4ster&#39;s blog</title>
+    <title>《XSS跨站脚本攻击剖析与防御》学习笔记（五） | M4ster&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="M4ster">
     
-    <meta name="description" content="前言
-近来在学习《XSS跨站脚本攻击剖析与防御》这本书，此书从XSS的基础攻击原理、危害以及一些常用的利用/防御的技巧再到高级利用方式衍生到Web 2.0的最大威胁——跨站脚本蠕虫，由浅入深的阐释了XSS对于网络安全意味着什么。在这里和大家分享下我的学习心得和知识的总结。
-XSS是什么
-XSS（Cr">
+    <meta name="description" content="网络钓鱼
+网络钓鱼是一种利用网络进行诈骗的手段，主要通过对受害者心理弱点、好奇心、信任度等心理陷阱来实现诈骗，属于社会工程学的一种。
+XSS Phishing
+普通的网络钓鱼成功率极低，结合了XSS技术的网络钓鱼是最具威胁的一种攻击手段。XSS跨站脚本最大的特性是能够在网页中插入并运行JS，不仅能劫">
     
     
     
@@ -73,15 +73,15 @@ XSS（Cr">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（前言）/" title="《XSS跨站脚本攻击剖析与防御》学习笔记（前言）" itemprop="url">《XSS跨站脚本攻击剖析与防御》学习笔记（前言）</a>
+      <a href="/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（五）/" title="《XSS跨站脚本攻击剖析与防御》学习笔记（五）" itemprop="url">《XSS跨站脚本攻击剖析与防御》学习笔记（五）</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://www.m4ster.net" title="M4ster">M4ster</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-12-25T06:32:28.000Z" itemprop="datePublished">2014年12月25日</time>
-    更新日期:<time datetime="2014-12-25T09:41:50.000Z" itemprop="dateModified">2014年12月25日</time>
+    <time datetime="2014-12-30T06:27:37.000Z" itemprop="datePublished">2014年12月30日</time>
+    更新日期:<time datetime="2014-12-30T07:03:07.000Z" itemprop="dateModified">2014年12月30日</time>
     
   </p>
 </header>
@@ -90,36 +90,31 @@ XSS（Cr">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS是什么"><span class="toc-number">1.1.</span> <span class="toc-text">XSS是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS给大部分人留下的印象"><span class="toc-number">1.2.</span> <span class="toc-text">XSS给大部分人留下的印象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS的危害"><span class="toc-number">1.3.</span> <span class="toc-text">XSS的危害</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS对于安全研究者来说"><span class="toc-number">1.4.</span> <span class="toc-text">XSS对于安全研究者来说</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络钓鱼"><span class="toc-number">1.</span> <span class="toc-text">网络钓鱼</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS_Phishing"><span class="toc-number">2.</span> <span class="toc-text">XSS Phishing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#钓鱼页面"><span class="toc-number">2.1.</span> <span class="toc-text">钓鱼页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#记录信息的脚本"><span class="toc-number">2.2.</span> <span class="toc-text">记录信息的脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS_Phishing_Exploit"><span class="toc-number">2.3.</span> <span class="toc-text">XSS Phishing Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS钓鱼的方式"><span class="toc-number">3.</span> <span class="toc-text">XSS钓鱼的方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS重定向钓鱼"><span class="toc-number">3.1.</span> <span class="toc-text">XSS重定向钓鱼</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTML注入式钓鱼"><span class="toc-number">3.2.</span> <span class="toc-text">HTML注入式钓鱼</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS跨框架钓鱼"><span class="toc-number">3.3.</span> <span class="toc-text">XSS跨框架钓鱼</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flash钓鱼"><span class="toc-number">3.4.</span> <span class="toc-text">Flash钓鱼</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高级钓鱼技术"><span class="toc-number">4.</span> <span class="toc-text">高级钓鱼技术</span></a></li></ol>
 		</div>
 		
-		<h2 id="前言">前言</h2>
-<p>近来在学习《XSS跨站脚本攻击剖析与防御》这本书，此书从XSS的基础攻击原理、危害以及一些常用的利用/防御的技巧再到高级利用方式衍生到Web 2.0的最大威胁——跨站脚本蠕虫，由浅入深的阐释了XSS对于网络安全意味着什么。在这里和大家分享下我的学习心得和知识的总结。</p>
-<h3 id="XSS是什么">XSS是什么</h3>
-<p>XSS（<code>Cross-site Scripting</code>）跨站脚本攻击，XSS作为最常见的计算机安全漏洞，在世界各地的网站上疯狂肆虐，即使最知名的网站也曾遭受过XSS漏洞攻击。</p>
-<h3 id="XSS给大部分人留下的印象">XSS给大部分人留下的印象</h3>
-<p>由于XSS属于被动式攻击，且不易利用，所以一直不被重视。</p>
-<ul>
-<li>XSS？反正XSS又不能直接获取我的root权限。</li>
-<li>跨站脚本是在客户端运行的，对我的网站没有危害。</li>
-<li>XSS等同于鸡肋漏洞。</li>
-<li>……</li>
-</ul>
-<h3 id="XSS的危害">XSS的危害</h3>
-<ul>
-<li>可以用来劫持浏览器用户的会话</li>
-<li>劫持客户端cookies、网络钓鱼</li>
-<li>让受害用户对服务器产生大量请求，形同对服务器的分布式拒绝服务攻击（<code>DDos</code>）</li>
-<li>……</li>
-</ul>
-<h3 id="XSS对于安全研究者来说">XSS对于安全研究者来说</h3>
-<ul>
-<li>攻击方式众多，灵活多变</li>
-<li>对于现在的社交网络，甚至可以衍生出蠕虫般的自我复制能力</li>
-<li>……</li>
-</ul>
-<h2 id="总结">总结</h2>
-<p>XSS攻击对于Web 2.0时代是不容忽视的安全威胁。作为安全研究者，必须要重视。</p>
+		<h2 id="网络钓鱼">网络钓鱼</h2>
+<p>网络钓鱼是一种利用网络进行诈骗的手段，主要通过对受害者心理弱点、好奇心、信任度等心理陷阱来实现诈骗，属于社会工程学的一种。</p>
+<h2 id="XSS_Phishing">XSS Phishing</h2>
+<p>普通的网络钓鱼成功率极低，结合了XSS技术的网络钓鱼是最具威胁的一种攻击手段。<br>XSS跨站脚本最大的特性是能够在网页中插入并运行JS，不仅能劫持用户的当前会话，同时还能控制浏览器的部分行为。利用这一点攻击者便能实施完美的钓鱼攻击，这种基于XSS的钓鱼技术被称为XSS Phishing。</p>
+<h3 id="钓鱼页面">钓鱼页面</h3>
+<p>攻击者会构造钓鱼页面。一般钓鱼网页的主要内容是登录表单部分，其代码可以从真实页面复制过去，然后修改接收提交信息的地址。</p>
+<h3 id="记录信息的脚本">记录信息的脚本</h3>
+<p>在远程服务器上，会存放一个用来接收和记录帐号和密码信息的文件，这文件的功能可以是恶意攻击者编写的用于保存提交上去的用户信息。</p>
+<h3 id="XSS_Phishing_Exploit">XSS Phishing Exploit</h3>
+<p>攻击者在页面中插入JS代码，使用JS创建一个iframe覆盖目标页面，再加载远程域伪造的钓鱼页面。</p>
+<h2 id="XSS钓鱼的方式">XSS钓鱼的方式</h2>
+<p>攻击者钓鱼的方式可谓是五花八门，层出不穷。</p>
+<h3 id="XSS重定向钓鱼">XSS重定向钓鱼</h3>
+<p>这种钓鱼方式是把当前页面重定向到一个钓鱼网站上。</p>
+<h3 id="HTML注入式钓鱼">HTML注入式钓鱼</h3>
+<p>HTML注入式钓鱼是指直接利用XSS漏洞注射HTML/JavaScript代码到页面当中。可以在正常页面当中嵌入一个form表单并覆盖屌原页面的显示，强迫用户输入帐号和密码等信息。</p>
+<h3 id="XSS跨框架钓鱼">XSS跨框架钓鱼</h3>
+<p>这种方式是通过<code>&lt;iframe&gt;</code>标签嵌入远程域的一个页面实施钓鱼。此时主页面依然处在正常网站的域名下，因此具有很高的迷惑性。</p>
+<h3 id="Flash钓鱼">Flash钓鱼</h3>
+<p>Flash钓鱼甚至不要求网站存在XSS漏洞，只要攻击者把精心构造的Flash文件（比如一个假冒的登录框）上传到远程服务器，然后在目标网站中使用<code>&lt;object&gt;</code>或<code>&lt;embed&gt;</code>标签去引用Flash即可。</p>
+<h2 id="高级钓鱼技术">高级钓鱼技术</h2>
+<p>即利用JS的事件监听，将用户在页面中输入的信息提交到指定的接收脚本。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -139,7 +134,7 @@ XSS（Cr">
 
 <div class="article-share" id="share">
 
-  <div data-url="http://www.m4ster.net/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（前言）/" data-title="《XSS跨站脚本攻击剖析与防御》学习笔记（前言） | M4ster&#39;s blog" data-tsina="null" class="share clearfix">
+  <div data-url="http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（五）/" data-title="《XSS跨站脚本攻击剖析与防御》学习笔记（五） | M4ster&#39;s blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -149,19 +144,27 @@ XSS（Cr">
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（一）/" title="《XSS跨站脚本攻击剖析与防御》学习笔记（一）">
+ <a href="/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（六）/" title="《XSS跨站脚本攻击剖析与防御》学习笔记（六）">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  《XSS跨站脚本攻击剖析与防御》学习笔记（一）</span>
+  《XSS跨站脚本攻击剖析与防御》学习笔记（六）</span>
 </a>
 </div>
 
+
+<div class="next">
+<a href="/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（四）/"  title="《XSS跨站脚本攻击剖析与防御》学习笔记（四）">
+ <strong>NEXT:</strong><br/> 
+ <span>《XSS跨站脚本攻击剖析与防御》学习笔记（四）
+</span>
+</a>
+</div>
 
 </nav>
 
 	
 <section class="comment" id="comments">
-	<div class="ds-thread" data-title="《XSS跨站脚本攻击剖析与防御》学习笔记（前言）" data-url="http://www.m4ster.net/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（前言）/"></div>
+	<div class="ds-thread" data-title="《XSS跨站脚本攻击剖析与防御》学习笔记（五）" data-url="http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（五）/"></div>
 </section>
 
 </div>  
@@ -169,7 +172,7 @@ XSS（Cr">
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS是什么"><span class="toc-number">1.1.</span> <span class="toc-text">XSS是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS给大部分人留下的印象"><span class="toc-number">1.2.</span> <span class="toc-text">XSS给大部分人留下的印象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS的危害"><span class="toc-number">1.3.</span> <span class="toc-text">XSS的危害</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS对于安全研究者来说"><span class="toc-number">1.4.</span> <span class="toc-text">XSS对于安全研究者来说</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络钓鱼"><span class="toc-number">1.</span> <span class="toc-text">网络钓鱼</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS_Phishing"><span class="toc-number">2.</span> <span class="toc-text">XSS Phishing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#钓鱼页面"><span class="toc-number">2.1.</span> <span class="toc-text">钓鱼页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#记录信息的脚本"><span class="toc-number">2.2.</span> <span class="toc-text">记录信息的脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS_Phishing_Exploit"><span class="toc-number">2.3.</span> <span class="toc-text">XSS Phishing Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS钓鱼的方式"><span class="toc-number">3.</span> <span class="toc-text">XSS钓鱼的方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS重定向钓鱼"><span class="toc-number">3.1.</span> <span class="toc-text">XSS重定向钓鱼</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTML注入式钓鱼"><span class="toc-number">3.2.</span> <span class="toc-text">HTML注入式钓鱼</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS跨框架钓鱼"><span class="toc-number">3.3.</span> <span class="toc-text">XSS跨框架钓鱼</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flash钓鱼"><span class="toc-number">3.4.</span> <span class="toc-text">Flash钓鱼</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高级钓鱼技术"><span class="toc-number">4.</span> <span class="toc-text">高级钓鱼技术</span></a></li></ol>
   </div>
 
 <div id="asidepart">

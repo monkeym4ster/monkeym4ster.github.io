@@ -4,7 +4,7 @@
   <subtitle><![CDATA[分享学习和生活中的点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.m4ster.net/"/>
-  <updated>2014-12-30T03:48:03.983Z</updated>
+  <updated>2014-12-30T07:10:47.472Z</updated>
   <id>http://www.m4ster.net/</id>
   
   <author>
@@ -13,6 +13,109 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（六）]]></title>
+    <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89/"/>
+    <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（六）/</id>
+    <published>2014-12-30T07:05:37.000Z</published>
+    <updated>2014-12-30T07:10:29.000Z</updated>
+    <content type="html"><![CDATA[]]></content>
+    <summary type="html">
+    <![CDATA[]]>
+    </summary>
+    
+      <category term="XSS" scheme="http://www.m4ster.net/tags/XSS/"/>
+    
+      <category term="跨站攻击" scheme="http://www.m4ster.net/tags/%E8%B7%A8%E7%AB%99%E6%94%BB%E5%87%BB/"/>
+    
+      <category term="读书笔记" scheme="http://www.m4ster.net/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（五）]]></title>
+    <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89/"/>
+    <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（五）/</id>
+    <published>2014-12-30T06:27:37.000Z</published>
+    <updated>2014-12-30T07:03:07.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="网络钓鱼">网络钓鱼</h2>
+<p>网络钓鱼是一种利用网络进行诈骗的手段，主要通过对受害者心理弱点、好奇心、信任度等心理陷阱来实现诈骗，属于社会工程学的一种。</p>
+<h2 id="XSS_Phishing">XSS Phishing</h2>
+<p>普通的网络钓鱼成功率极低，结合了XSS技术的网络钓鱼是最具威胁的一种攻击手段。<br>XSS跨站脚本最大的特性是能够在网页中插入并运行JS，不仅能劫持用户的当前会话，同时还能控制浏览器的部分行为。利用这一点攻击者便能实施完美的钓鱼攻击，这种基于XSS的钓鱼技术被称为XSS Phishing。</p>
+<h3 id="钓鱼页面">钓鱼页面</h3>
+<p>攻击者会构造钓鱼页面。一般钓鱼网页的主要内容是登录表单部分，其代码可以从真实页面复制过去，然后修改接收提交信息的地址。</p>
+<h3 id="记录信息的脚本">记录信息的脚本</h3>
+<p>在远程服务器上，会存放一个用来接收和记录帐号和密码信息的文件，这文件的功能可以是恶意攻击者编写的用于保存提交上去的用户信息。</p>
+<h3 id="XSS_Phishing_Exploit">XSS Phishing Exploit</h3>
+<p>攻击者在页面中插入JS代码，使用JS创建一个iframe覆盖目标页面，再加载远程域伪造的钓鱼页面。</p>
+<h2 id="XSS钓鱼的方式">XSS钓鱼的方式</h2>
+<p>攻击者钓鱼的方式可谓是五花八门，层出不穷。</p>
+<h3 id="XSS重定向钓鱼">XSS重定向钓鱼</h3>
+<p>这种钓鱼方式是把当前页面重定向到一个钓鱼网站上。</p>
+<h3 id="HTML注入式钓鱼">HTML注入式钓鱼</h3>
+<p>HTML注入式钓鱼是指直接利用XSS漏洞注射HTML/JavaScript代码到页面当中。可以在正常页面当中嵌入一个form表单并覆盖屌原页面的显示，强迫用户输入帐号和密码等信息。</p>
+<h3 id="XSS跨框架钓鱼">XSS跨框架钓鱼</h3>
+<p>这种方式是通过<code>&lt;iframe&gt;</code>标签嵌入远程域的一个页面实施钓鱼。此时主页面依然处在正常网站的域名下，因此具有很高的迷惑性。</p>
+<h3 id="Flash钓鱼">Flash钓鱼</h3>
+<p>Flash钓鱼甚至不要求网站存在XSS漏洞，只要攻击者把精心构造的Flash文件（比如一个假冒的登录框）上传到远程服务器，然后在目标网站中使用<code>&lt;object&gt;</code>或<code>&lt;embed&gt;</code>标签去引用Flash即可。</p>
+<h2 id="高级钓鱼技术">高级钓鱼技术</h2>
+<p>即利用JS的事件监听，将用户在页面中输入的信息提交到指定的接收脚本。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="网络钓鱼">网络钓鱼</h2>
+<p>网络钓鱼是一种利用网络进行诈骗的手段，主要通过对受害者心理弱点、好奇心、信任度等心理陷阱来实现诈骗，属于社会工程学的一种。</p>
+<h2 id="XSS_Phishing">XSS Phishing</h2>
+<p>普通的网]]>
+    </summary>
+    
+      <category term="XSS" scheme="http://www.m4ster.net/tags/XSS/"/>
+    
+      <category term="跨站攻击" scheme="http://www.m4ster.net/tags/%E8%B7%A8%E7%AB%99%E6%94%BB%E5%87%BB/"/>
+    
+      <category term="读书笔记" scheme="http://www.m4ster.net/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（四）]]></title>
+    <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89/"/>
+    <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（四）/</id>
+    <published>2014-12-30T05:32:15.000Z</published>
+    <updated>2014-12-30T06:26:54.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Cookie基础介绍">Cookie基础介绍</h2>
+<p>Cookie是用户浏览网页时网站存储在用户机器上的小文本文件，文件里记录了与用户相关的一些状态或设置，比如用户名、ID、访问次数等。当用户下一次访问这个网站的时候，网站会先访问用户机器上对应的该网站的Cookie文件，并从中读取信息，以便用户实现快速访问。</p>
+<h3 id="Cookie的作用">Cookie的作用</h3>
+<p>当以特定的账户和密码登录网站后，如果每一步操作都要求重新输入密码加以确认，这样会让人不甚其烦，所以浏览器和Web系统有必要对用户进行身份识别和会话跟踪，由此Cookie技术就诞生了。</p>
+<h3 id="Cookie的类型">Cookie的类型</h3>
+<p>Cookie的操作十分简单，通过Document对象访问Cookie。若要创建一个Cookie，只要将特定格式的字符串赋给document.cookie即可：  </p>
+<blockquote>
+<p>cookieName=cookieValue;expirationdate;path</p>
+</blockquote>
+<h3 id="Cookie常见属性：">Cookie常见属性：</h3>
+<blockquote>
+<p>Domain——设置关联Cookie的域名<br>Expires——通过给定一个过期时间来创建一个持久化的Cookie<br>HttpOnly——用于避免Cookie被JavaScript访问<br>Name——Cookie的名称<br>Path——关联到Cookie的路径；默认为/<br>Value——读写Cookie的值<br>Secure——用于指定Cookie需要通过安全Socket层连接传递</p>
+</blockquote>
+<h2 id="Cookie的安全">Cookie的安全</h2>
+<p>Cookie的安全一直是人们最关心的话题。最初Cookie被设计出来的时候也考虑了一些安全因素，比如对内容加密，只有对应的服务器才能读懂。<br>然而，由于Cookie保存在客户端，这意味着它随时可能被窃取和滥用，如果我们登录网站后没有退出帐号（<code>销毁Cookie</code>），当其他成员使用同一台计算机登录时，利用之前的Cookie，就能窃取我们帐号的“权限”。  </p>
+<h3 id="Cookie攻击原理剖析">Cookie攻击原理剖析</h3>
+<p>如前文所述，虽然Cookie信息是经过加密的，即使被网络上一些别有用心的人接货也不必过于担心，但现在遇到的问题是，窃取Cookie的人不需要知道这些字符串的含义，只要把Cookie信息向服务器提交并通过验证后，他们就可以冒充受害人的身份登录网站，这种行为一般叫做Cookie欺骗或者Cookie会话攻击。  </p>
+<p>攻击者通常利用网站XSS漏洞发起攻击。假设一个网站存在存储型XSS（或反射型XSS），攻击者就可以向漏洞页面写入窃取Cookie信息的恶意代码，在用户浏览XSS网页时，攻击者能够获取受害者当前浏览器中的Cookie信息。  </p>
+<h3 id="会话劫持剖析">会话劫持剖析</h3>
+<p>通过JS获取到浏览者的Cookie，记入攻击者远程数据库。攻击者通过获取到的Cookie可以执行一些只有该浏览者才有权限的操作。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Cookie基础介绍">Cookie基础介绍</h2>
+<p>Cookie是用户浏览网页时网站存储在用户机器上的小文本文件，文件里记录了与用户相关的一些状态或设置，比如用户名、ID、访问次数等。当用户下一次访问这个网站的时候，网站会先访问用户机器上对应的该网站的C]]>
+    </summary>
+    
+      <category term="XSS" scheme="http://www.m4ster.net/tags/XSS/"/>
+    
+      <category term="跨站攻击" scheme="http://www.m4ster.net/tags/%E8%B7%A8%E7%AB%99%E6%94%BB%E5%87%BB/"/>
+    
+      <category term="读书笔记" scheme="http://www.m4ster.net/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（三）]]></title>
