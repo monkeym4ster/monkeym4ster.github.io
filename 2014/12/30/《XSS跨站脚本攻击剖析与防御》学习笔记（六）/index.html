@@ -9,6 +9,13 @@
     
     <meta name="author" content="M4ster">
     
+    <meta name="description" content="黑盒手动测试
+在黑盒环境下，除了使用Web安全检测工具进行自动化测试，还可以依靠人工形式发掘跨站脚本漏洞。针对页面的输入框进行测试，可以输入一些能触发XSS的敏感字符，如：  
+
+&amp;lt; &amp;gt; &amp;quot; &amp;#39; &amp;amp; #
+
+然后在提交后查看源代码，查找输入的字符是否已被过滤或转义">
+    
     
     
     
@@ -76,7 +83,7 @@
     </p>
   <p class="article-time">
     <time datetime="2014-12-30T07:05:37.000Z" itemprop="datePublished">2014年12月30日</time>
-    更新日期:<time datetime="2014-12-30T07:10:29.000Z" itemprop="dateModified">2014年12月30日</time>
+    更新日期:<time datetime="2014-12-30T10:08:17.000Z" itemprop="dateModified">2014年12月30日</time>
     
   </p>
 </header>
@@ -85,10 +92,28 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#黑盒手动测试"><span class="toc-number">1.</span> <span class="toc-text">黑盒手动测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源代码安全审计"><span class="toc-number">2.</span> <span class="toc-text">源代码安全审计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript代码分析"><span class="toc-number">3.</span> <span class="toc-text">JavaScript代码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DOM_Based_XSS"><span class="toc-number">3.1.</span> <span class="toc-text">DOM Based XSS</span></a></li></ol></li></ol>
 		</div>
 		
-		  
+		<h2 id="黑盒手动测试">黑盒手动测试</h2>
+<p>在黑盒环境下，除了使用Web安全检测工具进行自动化测试，还可以依靠人工形式发掘跨站脚本漏洞。<br>针对页面的输入框进行测试，可以输入一些能触发XSS的敏感字符，如：  </p>
+<blockquote>
+<p><code>&lt; &gt; &quot; &#39; &amp; #</code></p>
+</blockquote>
+<p>然后在提交后查看源代码，查找输入的字符是否已被过滤或转义。<br>假设<code>&lt; &gt;</code>等标记符号被过滤了，我们还可以利用其他形式（如标签属性，事件等）触发XSS。</p>
+<h2 id="源代码安全审计">源代码安全审计</h2>
+<p>思路：查找可能在页面输出的变量，检验它们是否受到控制，然后跟踪这些变量的传递过程，分析它们是否被htmlencode()之类的函数过滤。<br>分析哪些变量或动态内容来自用户并且可以自用控制，这要根据服务器端采用的程序语言而定。假设服务器端使用的是PHP语言，我们就可以将其全局办理作为检查对象。<br>PHP提供了以下几个超全局变量：  </p>
+<blockquote>
+<p>$GLOBALS<br>$_SERVER<br>$_GET<br>$_POST<br>$_FILES<br>$_COOKIE<br>$_SESSION<br>$_REQUEST<br>$_ENV  </p>
+</blockquote>
+<p>以上的全局变量都可以作为代码审计的主要对象，大部分可以作为用户的输入源，其中，$_SERVER、$_GET、$_POST和$_REQUEST经常用来获取用户的输入，在代码审计过程中要密切关注这些变量。</p>
+<h2 id="JavaScript代码分析">JavaScript代码分析</h2>
+<p>在白盒环境下，通过对Web程序代码进行安全审计，可以发掘初大量影藏在应用程序中的跨站漏洞。除此之外，还可以通过分析客户端的JavaScript程序越来越多地被使用在各种场合，其带来的安全问题也日渐突出。<br>由于JavaScript功能强大，能控制Web客户端的逻辑，甚至能操作用户的输入和输出。在这过程之中，如果用户的恶意输入没有被正确处理就可能产生XSS。</p>
+<h3 id="DOM_Based_XSS">DOM Based XSS</h3>
+<blockquote>
+<p>待续……</p>
+</blockquote>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -137,7 +162,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#黑盒手动测试"><span class="toc-number">1.</span> <span class="toc-text">黑盒手动测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源代码安全审计"><span class="toc-number">2.</span> <span class="toc-text">源代码安全审计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript代码分析"><span class="toc-number">3.</span> <span class="toc-text">JavaScript代码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DOM_Based_XSS"><span class="toc-number">3.1.</span> <span class="toc-text">DOM Based XSS</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
