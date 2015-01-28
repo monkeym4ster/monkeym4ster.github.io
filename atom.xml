@@ -4,7 +4,7 @@
   <subtitle><![CDATA[分享学习和生活中的点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.m4ster.net/"/>
-  <updated>2014-12-30T10:10:23.546Z</updated>
+  <updated>2015-01-28T02:58:11.006Z</updated>
   <id>http://www.m4ster.net/</id>
   
   <author>
@@ -15,11 +15,46 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[使用JavaScript获取本地和公网IP]]></title>
+    <link href="http://www.m4ster.net/2015/01/28/%E4%BD%BF%E7%94%A8JavaScript%E8%8E%B7%E5%8F%96%E6%9C%AC%E5%9C%B0%E5%92%8C%E5%85%AC%E7%BD%91IP/"/>
+    <id>http://www.m4ster.net/2015/01/28/使用JavaScript获取本地和公网IP/</id>
+    <published>2015-01-28T02:44:50.000Z</published>
+    <updated>2015-01-28T02:57:01.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>前些天老外发出了一个脚本，让支持WebRTC的浏览器可以向STUN服务器请求，返回内外网IP。</p>
+</blockquote>
+<h2 id="webrtc-ips：">webrtc-ips：</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//get the IP addresses associated with an account </span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getIPs</span><span class="params">(callback)</span></span>{ </div><div class="line">    <span class="keyword">var</span> ip_dups = {}; </div><div class="line"></div><div class="line">    <span class="comment">//compatibility for firefox and chrome </span></div><div class="line">    <span class="keyword">var</span> RTCPeerConnection = <span class="built_in">window</span>.RTCPeerConnection </div><div class="line">        || <span class="built_in">window</span>.mozRTCPeerConnection </div><div class="line">        || <span class="built_in">window</span>.webkitRTCPeerConnection; </div><div class="line">    <span class="keyword">var</span> mediaConstraints = { </div><div class="line">        optional: [{RtpDataChannels: <span class="literal">true</span>}] </div><div class="line">    }; </div><div class="line"></div><div class="line">    <span class="comment">//firefox already has a default stun server in about:config </span></div><div class="line">    <span class="comment">//    media.peerconnection.default_iceservers = </span></div><div class="line">    <span class="comment">//    [{"url": "stun:stun.services.mozilla.com"}] </span></div><div class="line">    <span class="keyword">var</span> servers = <span class="literal">undefined</span>; </div><div class="line"></div><div class="line">    <span class="comment">//add same stun server for chrome </span></div><div class="line">    <span class="keyword">if</span>(<span class="built_in">window</span>.webkitRTCPeerConnection) </div><div class="line">        servers = {iceServers: [{urls: <span class="string">"stun:stun.services.mozilla.com"</span>}]}; </div><div class="line"></div><div class="line">    <span class="comment">//construct a new RTCPeerConnection </span></div><div class="line">    <span class="keyword">var</span> pc = <span class="keyword">new</span> RTCPeerConnection(servers, mediaConstraints); </div><div class="line"></div><div class="line">    <span class="comment">//listen for candidate events </span></div><div class="line">    pc.onicecandidate = <span class="function"><span class="keyword">function</span><span class="params">(ice)</span></span>{ </div><div class="line"></div><div class="line">        <span class="comment">//skip non-candidate events </span></div><div class="line">        <span class="keyword">if</span>(ice.candidate){ </div><div class="line"></div><div class="line">            <span class="comment">//match just the IP address </span></div><div class="line">            <span class="keyword">var</span> ip_regex = <span class="regexp">/([0-9]{1,3}(\.[0-9]{1,3}){3})/</span> </div><div class="line">            <span class="keyword">var</span> ip_addr = ip_regex.exec(ice.candidate.candidate)[<span class="number">1</span>]; </div><div class="line"></div><div class="line">            <span class="comment">//remove duplicates </span></div><div class="line">            <span class="keyword">if</span>(ip_dups[ip_addr] === <span class="literal">undefined</span>) </div><div class="line">                callback(ip_addr); </div><div class="line"></div><div class="line">            ip_dups[ip_addr] = <span class="literal">true</span>; </div><div class="line">        } </div><div class="line">    }; </div><div class="line"></div><div class="line">    <span class="comment">//create a bogus data channel </span></div><div class="line">    pc.createDataChannel(<span class="string">""</span>); </div><div class="line"></div><div class="line">    <span class="comment">//create an offer sdp </span></div><div class="line">    pc.createOffer(<span class="function"><span class="keyword">function</span><span class="params">(result)</span></span>{ </div><div class="line"></div><div class="line">        <span class="comment">//trigger the stun server request </span></div><div class="line">        pc.setLocalDescription(result, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}); </div><div class="line"></div><div class="line">    }, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}); </div><div class="line">} </div><div class="line"></div><div class="line"><span class="comment">//Test: Print the IP addresses into the console </span></div><div class="line">getIPs(<span class="function"><span class="keyword">function</span><span class="params">(ip)</span></span>{<span class="built_in">console</span>.log(ip);});</div></pre></td></tr></table></figure>
+
+<h2 id="分析脚本">分析脚本</h2>
+<h3 id="解读代码">解读代码</h3>
+<p>首先，作者定义了一个getIPs函数，函数执行后返回的是一个callback结果。</p>
+<blockquote>
+<p>待续……</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p>前些天老外发出了一个脚本，让支持WebRTC的浏览器可以向STUN服务器请求，返回内外网IP。</p>
+</blockquote>
+<h2 id="webrtc-ips：">webrtc-ips：</h2>
+<figure class="highl]]>
+    </summary>
+    
+      <category term="XSS" scheme="http://www.m4ster.net/tags/XSS/"/>
+    
+      <category term="跨站攻击" scheme="http://www.m4ster.net/tags/%E8%B7%A8%E7%AB%99%E6%94%BB%E5%87%BB/"/>
+    
+      <category term="javascript" scheme="http://www.m4ster.net/categories/javascript/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（六）]]></title>
     <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（六）/</id>
     <published>2014-12-30T07:05:37.000Z</published>
-    <updated>2014-12-30T10:08:17.000Z</updated>
+    <updated>2014-12-30T16:27:32.000Z</updated>
     <content type="html"><![CDATA[<h2 id="黑盒手动测试">黑盒手动测试</h2>
 <p>在黑盒环境下，除了使用Web安全检测工具进行自动化测试，还可以依靠人工形式发掘跨站脚本漏洞。<br>针对页面的输入框进行测试，可以输入一些能触发XSS的敏感字符，如：  </p>
 <blockquote>
