@@ -1,0 +1,469 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>【转载】WebRTC简介 | M4ster&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="M4ster">
+    
+    <meta name="description" content="概述
+WebRTC是“网络实时通信”（Web Real Time Communication）的缩写。它最初是为了解决浏览器上视频通话而提出的，即两个浏览器之间直接进行视频和音频的通信，不经过服务器。后来发展到除了音频和视频，还可以传输文字和其他数据。Google是WebRTC的主要支持者和开发者，">
+    
+    
+    
+    
+    <link rel="alternate" href="http://www.m4ster.net/atom.xml" title="M4ster&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="M4ster&#39;s blog" title="M4ster&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="M4ster&#39;s blog">M4ster&#39;s blog</a></h1>
+				<h2 class="blog-motto">分享学习和生活中的点滴</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">存档</a></li>
+					
+						<li><a href="/test">测试</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:www.m4ster.net">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/28/【转载】WebRTC简介/" title="【转载】WebRTC简介" itemprop="url">【转载】WebRTC简介</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://www.m4ster.net" title="M4ster">M4ster</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-01-28T03:27:29.000Z" itemprop="datePublished">2015年01月28日</time>
+    更新日期:<time datetime="2015-01-28T06:20:25.000Z" itemprop="dateModified">2015年01月28日</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getUserMedia"><span class="toc-number">2.</span> <span class="toc-text">getUserMedia</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#概述-1"><span class="toc-number">2.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#范例：获取摄像头"><span class="toc-number">2.2.</span> <span class="toc-text">范例：获取摄像头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#范例：捕获麦克风声音"><span class="toc-number">2.3.</span> <span class="toc-text">范例：捕获麦克风声音</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#捕获的限定条件"><span class="toc-number">2.4.</span> <span class="toc-text">捕获的限定条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MediaStreamTrack-getSources()"><span class="toc-number">2.5.</span> <span class="toc-text">MediaStreamTrack.getSources()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RTCPeerConnectionl，RTCDataChannel"><span class="toc-number">3.</span> <span class="toc-text">RTCPeerConnectionl，RTCDataChannel</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RTCPeerConnectionl"><span class="toc-number">3.1.</span> <span class="toc-text">RTCPeerConnectionl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RTCDataChannel"><span class="toc-number">3.2.</span> <span class="toc-text">RTCDataChannel</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#外部函数库"><span class="toc-number">3.3.</span> <span class="toc-text">外部函数库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考链接"><span class="toc-number">3.4.</span> <span class="toc-text">参考链接</span></a></li></ol></li></ol>
+		</div>
+		
+		<h2 id="概述">概述</h2>
+<p>WebRTC是“网络实时通信”（Web Real Time Communication）的缩写。它最初是为了解决浏览器上视频通话而提出的，即两个浏览器之间直接进行视频和音频的通信，不经过服务器。后来发展到除了音频和视频，还可以传输文字和其他数据。<br>Google是WebRTC的主要支持者和开发者，它最初在Gmail上推出了视频聊天，后来在2011年推出了Hangouts，语序在浏览器中打电话。它推动了WebRTC标准的确立。<br>WebRTC主要让浏览器具备三个作用。  </p>
+<blockquote>
+<p>获取音频和视频<br>进行音频和视频通信<br>进行任意数据的通信  </p>
+</blockquote>
+<p>WebRTC共分成三个API，分别对应上面三个作用。</p>
+<blockquote>
+<p>MediaStream （又称getUserMedia）<br>RTCPeerConnection<br>RTCDataChannel  </p>
+</blockquote>
+<h2 id="getUserMedia">getUserMedia</h2>
+<h3 id="概述-1">概述</h3>
+<p>navigator.getUserMedia方法目前主要用于，在浏览器中获取音频（通过麦克风）和视频（通过摄像头），将来可以用于获取任意数据流，比如光盘和传感器。<br>下面的代码用于检查浏览器是否支持getUserMedia方法。  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">navigator.getUserMedia  = navigator.getUserMedia <span class="string">||</span></div><div class="line">                          navigator.webkitGetUserMedia <span class="string">||</span></div><div class="line">                          navigator.mozGetUserMedia <span class="string">||</span></div><div class="line">                          navigator.msGetUserMedia;</div><div class="line"></div><div class="line">if (navigator.getUserMedia) {</div><div class="line">    <span class="comment">// 支持</span></div><div class="line">} else {</div><div class="line">    <span class="comment">// 不支持</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>Chrome 21, Opera 18和Firefox 17，支持该方法。目前，IE还不支持，上面代码中的msGetUserMedia，只是为了确保将来的兼容。<br>getUserMedia方法接受三个参数。 </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">navigator</span><span class="class">.getUserMedia</span>(<span class="rules">{</span></div><div class="line">    <span class="rule"><span class="attribute">video</span>:<span class="value"> true, </span></span></div><div class="line">    audio: true</div><div class="line">}, <span class="tag">onSuccess</span>, <span class="tag">onError</span>);</div></pre></td></tr></table></figure>
+
+<p>getUserMedia的第一个参数是一个对象，表示要获取哪些多媒体设备，上面的代码表示获取摄像头和麦克风;onSuccess是一个回调函数，在获取多媒体设备成功时调用；onError也是一个回调函数，在取多媒体设备失败时调用。  </p>
+<p>下面是一个例子：  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> constraints = {video: <span class="literal">true</span>};</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">onSuccess</span><span class="params">(stream)</span> </span>{</div><div class="line">  <span class="keyword">var</span> video = <span class="built_in">document</span>.querySelector(<span class="string">"video"</span>);</div><div class="line">  video.src = <span class="built_in">window</span>.URL.createObjectURL(stream);</div><div class="line">}</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">onError</span><span class="params">(error)</span> </span>{</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">"navigator.getUserMedia error: "</span>, error);</div><div class="line">}</div><div class="line"></div><div class="line">navigator.getUserMedia(constraints, onSuccess, onError);</div></pre></td></tr></table></figure>
+
+<p>如果网页使用了getUserMedia方法，浏览器就会询问用户，是否同意浏览器调用麦克风或摄像头。如果用户同意，就调用回调函数onSuccess；如果用户拒绝，就调用回调函数onError。  </p>
+<p>onSuccess回调函数的参数是一个数据流对象stream。stream.getAudioTracks方法和stream.getVideoTracks方法，分别返回一个数组，其成员是数据流包含的音轨和视轨（track）。使用的声音源和摄影头的数量，决定音轨和视轨的数量。比如，如果只使用一个摄像头获取视频，且不获取音频，那么视轨的数量为1，音轨的数量为0。每个音轨和视轨，有一个kind属性，表示种类（video或者audio），和一个label属性（比如FaceTime HD Camera (Built-in)）。  </p>
+<p>onError回调函数接受一个Error对象作为参数。Error对象的code属性有如下取值，说明错误的类型。</p>
+<blockquote>
+<p>PERMISSION_DENIED：用户拒绝提供信息。<br>NOT_SUPPORTED_ERROR：浏览器不支持硬件设备。<br>MANDATORY_UNSATISFIED_ERROR：无法发现指定的硬件设备。</p>
+</blockquote>
+<h3 id="范例：获取摄像头">范例：获取摄像头</h3>
+<p>下面通过getUserMedia方法，将摄像头拍摄的图像展示在网页上。  </p>
+<p>首先，需要先在网页上放置一个video元素。图像就展示在这个元素中。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">video</span> <span class="attribute">id</span>=<span class="value">"webcam"</span>&gt;</span><span class="tag">&lt;/<span class="title">video</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>然后，用代码获取这个元素。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">onSuccess</span><span class="params">(stream)</span> </span>{</div><div class="line">    <span class="keyword">var</span> video = <span class="built_in">document</span>.getElementById(<span class="string">'webcam'</span>);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>接着，将这个元素的src属性绑定数据流，摄影头拍摄的图像就可以显示了。  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">onSuccess</span><span class="params">(stream)</span> </span>{</div><div class="line">    <span class="keyword">var</span> video = <span class="built_in">document</span>.getElementById(<span class="string">'webcam'</span>);</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.URL) {</div><div class="line">        video.src = <span class="built_in">window</span>.URL.createObjectURL(stream);</div><div class="line">    } <span class="keyword">else</span> {</div><div class="line">        video.src = stream;</div><div class="line">    }</div><div class="line"></div><div class="line">    video.autoplay = <span class="literal">true</span>; </div><div class="line">    <span class="comment">// 或者 video.play();</span></div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">if</span> (navigator.getUserMedia) {</div><div class="line">    navigator.getUserMedia({video:<span class="literal">true</span>}, onSuccess);</div><div class="line">} <span class="keyword">else</span> {</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'webcam'</span>).src = <span class="string">'somevideo.mp4'</span>;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>在Chrome和Opera中，URL.createObjectURL方法将媒体数据流（MediaStream）转为一个二进制对象的URL（Blob URL），该URL可以作为video元素的src属性的值。 在Firefox中，媒体数据流可以直接作为src属性的值。Chrome和Opera还允许getUserMedia获取的音频数据，直接作为audio或者video元素的值，也就是说如果还获取了音频，上面代码播放出来的视频是有声音的。  </p>
+<p>获取摄像头的主要用途之一，是让用户使用摄影头为自己拍照。Canvas API有一个ctx.drawImage(video, 0, 0)方法，可以将视频的一个帧转为canvas元素。这使得截屏变得非常容易。  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">video</span> <span class="attribute">autoplay</span>&gt;</span><span class="tag">&lt;/<span class="title">video</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">""</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">canvas</span> <span class="attribute">style</span>=<span class="value">"display:none;"</span>&gt;</span><span class="tag">&lt;/<span class="title">canvas</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript"></span></div><div class="line">  <span class="keyword">var</span> video = <span class="built_in">document</span>.querySelector(<span class="string">'video'</span>);</div><div class="line">  <span class="keyword">var</span> canvas = <span class="built_in">document</span>.querySelector(<span class="string">'canvas'</span>);</div><div class="line">  <span class="keyword">var</span> ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">  <span class="keyword">var</span> localMediaStream = <span class="literal">null</span>;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">snapshot</span><span class="params">()</span> </span>{</div><div class="line">    <span class="keyword">if</span> (localMediaStream) {</div><div class="line">      ctx.drawImage(video, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">      <span class="comment">// “image/webp”对Chrome有效，</span></div><div class="line">      <span class="comment">// 其他浏览器自动降为image/png</span></div><div class="line">      <span class="built_in">document</span>.querySelector(<span class="string">'img'</span>).src = canvas.toDataURL(<span class="string">'image/webp'</span>);</div><div class="line">    }</div><div class="line">  }</div><div class="line"></div><div class="line">  video.addEventListener(<span class="string">'click'</span>, snapshot, <span class="literal">false</span>);</div><div class="line"></div><div class="line">  navigator.getUserMedia({video: <span class="literal">true</span>}, <span class="function"><span class="keyword">function</span><span class="params">(stream)</span> </span>{</div><div class="line">    video.src = <span class="built_in">window</span>.URL.createObjectURL(stream);</div><div class="line">    localMediaStream = stream;</div><div class="line">  }, errorCallback);</div><div class="line"><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<h3 id="范例：捕获麦克风声音">范例：捕获麦克风声音</h3>
+<p>通过浏览器捕获声音，需要借助Web Audio API。   </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.AudioContext = <span class="built_in">window</span>.AudioContext ||</div><div class="line">                      <span class="built_in">window</span>.webkitAudioContext;</div><div class="line"></div><div class="line"><span class="keyword">var</span> context = <span class="keyword">new</span> AudioContext();</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">onSuccess</span><span class="params">(stream)</span> </span>{</div><div class="line">    <span class="keyword">var</span> audioInput = context.createMediaStreamSource(stream);</div><div class="line">    audioInput.connect(context.destination);</div><div class="line">}</div><div class="line"></div><div class="line">navigator.getUserMedia({audio:<span class="literal">true</span>}, onSuccess);</div></pre></td></tr></table></figure>
+
+<h3 id="捕获的限定条件">捕获的限定条件</h3>
+<p>getUserMedia方法的第一个参数，除了指定捕获对象之外，还可以指定一些限制条件，比如限定只能录制高清（或者VGA标准）的视频。  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> hdConstraints = {</div><div class="line">  video: {</div><div class="line">    mandatory: {</div><div class="line">      minWidth: <span class="number">1280</span>,</div><div class="line">      minHeight: <span class="number">720</span></div><div class="line">    }</div><div class="line">  }</div><div class="line">};</div><div class="line"></div><div class="line">navigator.getUserMedia(hdConstraints, onSuccess, onError);</div><div class="line"></div><div class="line"><span class="keyword">var</span> vgaConstraints = {</div><div class="line">  video: {</div><div class="line">    mandatory: {</div><div class="line">      maxWidth: <span class="number">640</span>,</div><div class="line">      maxHeight: <span class="number">360</span></div><div class="line">    }</div><div class="line">  }</div><div class="line">};</div><div class="line"></div><div class="line">navigator.getUserMedia(vgaConstraints, onSuccess, onError);</div></pre></td></tr></table></figure>
+
+<h3 id="MediaStreamTrack-getSources()">MediaStreamTrack.getSources()</h3>
+<p>如果本机有多个摄像头/麦克风，这时就需要使用MediaStreamTrack.getSources方法指定，到底使用哪一个摄像头/麦克风。  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">MediaStreamTrack.getSources(function(<span class="built_in">source</span>Infos) {</div><div class="line">  var audioSource = null;</div><div class="line">  var videoSource = null;</div><div class="line"></div><div class="line">  <span class="keyword">for</span> (var i = <span class="number">0</span>; i != <span class="built_in">source</span>Infos.length; ++i) {</div><div class="line">    var <span class="built_in">source</span>Info = <span class="built_in">source</span>Infos[i];</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">source</span>Info.kind === <span class="string">'audio'</span>) {</div><div class="line">      console.log(<span class="built_in">source</span>Info.id, <span class="built_in">source</span>Info.label || <span class="string">'microphone'</span>);</div><div class="line"></div><div class="line">      audioSource = <span class="built_in">source</span>Info.id;</div><div class="line">    } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">source</span>Info.kind === <span class="string">'video'</span>) {</div><div class="line">      console.log(<span class="built_in">source</span>Info.id, <span class="built_in">source</span>Info.label || <span class="string">'camera'</span>);</div><div class="line"></div><div class="line">      videoSource = <span class="built_in">source</span>Info.id;</div><div class="line">    } <span class="keyword">else</span> {</div><div class="line">      console.log(<span class="string">'Some other kind of source: '</span>, <span class="built_in">source</span>Info);</div><div class="line">    }</div><div class="line">  }</div><div class="line"></div><div class="line">  <span class="built_in">source</span>Selected(audioSource, videoSource);</div><div class="line">});</div><div class="line"></div><div class="line">function <span class="built_in">source</span>Selected(audioSource, videoSource) {</div><div class="line">  var constraints = {</div><div class="line">    audio: {</div><div class="line">      optional: [{<span class="built_in">source</span>Id: audioSource}]</div><div class="line">    },</div><div class="line">    video: {</div><div class="line">      optional: [{<span class="built_in">source</span>Id: videoSource}]</div><div class="line">    }</div><div class="line">  };</div><div class="line"></div><div class="line">  navigator.getUserMedia(constraints, onSuccess, onError);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>上面代码表示，MediaStreamTrack.getSources方法的回调函数，可以得到一个本机的摄像头和麦克风的列表，然后指定使用最后一个摄像头和麦克风。  </p>
+<h2 id="RTCPeerConnectionl，RTCDataChannel">RTCPeerConnectionl，RTCDataChannel</h2>
+<h3 id="RTCPeerConnectionl">RTCPeerConnectionl</h3>
+<p>RTCPeerConnection的作用是在浏览器之间建立数据的“点对点”（peer to peer）通信，也就是将浏览器获取的麦克风或摄像头数据，传播给另一个浏览器。这里面包含了很多复杂的工作，比如信号处理、多媒体编码/解码、点对点通信、数据安全、带宽管理等等。  </p>
+<p>不同客户端之间的音频/视频传递，是不用通过服务器的。但是，两个客户端之间建立联系，需要通过服务器。服务器主要转递两种数据。  </p>
+<blockquote>
+<p>通信内容的元数据：打开/关闭对话（session）的命令、媒体文件的元数据（编码格式、媒体类型和带宽）等。<br>网络通信的元数据：IP地址、NAT网络地址翻译和防火墙等。</p>
+</blockquote>
+<p>WebRTC协议没有规定与服务器的通信方式，因此可以采用各种方式，比如WebSocket。通过服务器，两个客户端按照Session Description Protocol（SDP协议）交换双方的元数据。  </p>
+<p>下面是一个示例。  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> signalingChannel = createSignalingChannel();</div><div class="line"><span class="keyword">var</span> pc;</div><div class="line"><span class="keyword">var</span> configuration = ...;</div><div class="line"></div><div class="line"><span class="comment">// run start(true) to initiate a call</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">start</span><span class="params">(isCaller)</span> </span>{</div><div class="line">    pc = <span class="keyword">new</span> RTCPeerConnection(configuration);</div><div class="line"></div><div class="line">    <span class="comment">// send any ice candidates to the other peer</span></div><div class="line">    pc.onicecandidate = <span class="function"><span class="keyword">function</span> <span class="params">(evt)</span> </span>{</div><div class="line">        signalingChannel.send(<span class="built_in">JSON</span>.stringify({ <span class="string">"candidate"</span>: evt.candidate }));</div><div class="line">    };</div><div class="line"></div><div class="line">    <span class="comment">// once remote stream arrives, show it in the remote video element</span></div><div class="line">    pc.onaddstream = <span class="function"><span class="keyword">function</span> <span class="params">(evt)</span> </span>{</div><div class="line">        remoteView.src = URL.createObjectURL(evt.stream);</div><div class="line">    };</div><div class="line"></div><div class="line">    <span class="comment">// get the local stream, show it in the local video element and send it</span></div><div class="line">    navigator.getUserMedia({ <span class="string">"audio"</span>: <span class="literal">true</span>, <span class="string">"video"</span>: <span class="literal">true</span> }, <span class="function"><span class="keyword">function</span> <span class="params">(stream)</span> </span>{</div><div class="line">        selfView.src = URL.createObjectURL(stream);</div><div class="line">        pc.addStream(stream);</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (isCaller)</div><div class="line">            pc.createOffer(gotDescription);</div><div class="line">        <span class="keyword">else</span></div><div class="line">            pc.createAnswer(pc.remoteDescription, gotDescription);</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">gotDescription</span><span class="params">(desc)</span> </span>{</div><div class="line">            pc.setLocalDescription(desc);</div><div class="line">            signalingChannel.send(<span class="built_in">JSON</span>.stringify({ <span class="string">"sdp"</span>: desc }));</div><div class="line">        }</div><div class="line">    });</div><div class="line">}</div><div class="line"></div><div class="line">signalingChannel.onmessage = <span class="function"><span class="keyword">function</span> <span class="params">(evt)</span> </span>{</div><div class="line">    <span class="keyword">if</span> (!pc)</div><div class="line">        start(<span class="literal">false</span>);</div><div class="line"></div><div class="line">    <span class="keyword">var</span> signal = <span class="built_in">JSON</span>.parse(evt.data);</div><div class="line">    <span class="keyword">if</span> (signal.sdp)</div><div class="line">        pc.setRemoteDescription(<span class="keyword">new</span> RTCSessionDescription(signal.sdp));</div><div class="line">    <span class="keyword">else</span></div><div class="line">        pc.addIceCandidate(<span class="keyword">new</span> RTCIceCandidate(signal.candidate));</div><div class="line">};</div></pre></td></tr></table></figure>
+
+<p>RTCPeerConnection带有浏览器前缀，Chrome浏览器中为webkitRTCPeerConnection，Firefox浏览器中为mozRTCPeerConnection。Google维护一个函数库adapter.js，用来抽象掉浏览器之间的差异。  </p>
+<h3 id="RTCDataChannel">RTCDataChannel</h3>
+<p>RTCDataChannel的作用是在点对点之间，传播任意数据。它的API与WebSockets的API相同。  </p>
+<p>下面是一个示例。  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> pc = <span class="keyword">new</span> webkitRTCPeerConnection(servers,</div><div class="line">  {optional: [{RtpDataChannels: <span class="literal">true</span>}]});</div><div class="line"></div><div class="line">pc.ondatachannel = <span class="function"><span class="keyword">function</span><span class="params">(event)</span> </span>{</div><div class="line">  receiveChannel = event.channel;</div><div class="line">  receiveChannel.onmessage = <span class="function"><span class="keyword">function</span><span class="params">(event)</span></span>{</div><div class="line">    <span class="built_in">document</span>.querySelector(<span class="string">"div#receive"</span>).innerHTML = event.data;</div><div class="line">  };</div><div class="line">};</div><div class="line"></div><div class="line">sendChannel = pc.createDataChannel(<span class="string">"sendDataChannel"</span>, {reliable: <span class="literal">false</span>});</div><div class="line"></div><div class="line"><span class="built_in">document</span>.querySelector(<span class="string">"button#send"</span>).onclick = <span class="function"><span class="keyword">function</span> <span class="params">()</span></span>{</div><div class="line">  <span class="keyword">var</span> data = <span class="built_in">document</span>.querySelector(<span class="string">"textarea#send"</span>).value;</div><div class="line">  sendChannel.send(data);</div><div class="line">};</div></pre></td></tr></table></figure>
+
+<p>Chrome 25、Opera 18和Firefox 22支持RTCDataChannel。</p>
+<h3 id="外部函数库">外部函数库</h3>
+<p>由于这两个API比较复杂，一般采用外部函数库进行操作。目前，视频聊天的函数库有<a href="https://github.com/henrikjoreteg/SimpleWebRTC" target="_blank" rel="external">SimpleWebRTC</a>、<a href="https://github.com/priologic/easyrtc" target="_blank" rel="external">easyRTC</a>、<a href="https://github.com/webRTC/webRTC.io" target="_blank" rel="external">webRTC.io</a>，点对点通信的函数库有<a href="http://peerjs.com/" target="_blank" rel="external">PeerJS</a>、<a href="https://github.com/peer5/sharefest" target="_blank" rel="external">Sharefest</a>。  </p>
+<p>下面是SimpleWebRTC的示例。  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> webrtc = <span class="keyword">new</span> WebRTC({</div><div class="line">  localVideoEl: <span class="string">'localVideo'</span>,</div><div class="line">  remoteVideosEl: <span class="string">'remoteVideos'</span>,</div><div class="line">  autoRequestMedia: <span class="literal">true</span></div><div class="line">});</div><div class="line"></div><div class="line">webrtc.on(<span class="string">'readyToCall'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>{</div><div class="line">    webrtc.joinRoom(<span class="string">'My room name'</span>);</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<p>下面是PeerJS的示例。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> peer = <span class="keyword">new</span> Peer(<span class="string">'someid'</span>, {key: <span class="string">'apikey'</span>});</div><div class="line">peer.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span><span class="params">(conn)</span> </span>{</div><div class="line">  conn.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span><span class="params">(data)</span></span>{</div><div class="line">    <span class="comment">// Will print 'hi!'</span></div><div class="line">    <span class="built_in">console</span>.log(data);</div><div class="line">  });</div><div class="line">});</div><div class="line"></div><div class="line"><span class="comment">// Connecting peer</span></div><div class="line"><span class="keyword">var</span> peer = <span class="keyword">new</span> Peer(<span class="string">'anotherid'</span>, {key: <span class="string">'apikey'</span>});</div><div class="line"><span class="keyword">var</span> conn = peer.connect(<span class="string">'someid'</span>);</div><div class="line">conn.on(<span class="string">'open'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">  conn.send(<span class="string">'hi!'</span>);</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<h3 id="参考链接">参考链接</h3>
+<p>[1]Andi Smith，<a href="http://www.netmagazine.com/tutorials/get-started-webrtc" target="_blank" rel="external">Get Started with WebRTC</a><br>[2]Thibault Imbert, <a href="http://typedarray.org/from-microphone-to-wav-with-getusermedia-and-web-audio/" target="_blank" rel="external">From microphone to .WAV with: getUserMedia and Web Audio</a><br>[3]Ian Devlin, <a href="http://html5hub.com/using-the-getusermedia-api-with-the-html5-video-and-canvas-elements/#i.bz41ehmmhd3311" target="_blank" rel="external">Using the getUserMedia API with the HTML5 video and canvas elements</a><br>[4]Eric Bidelman, <a href="http://www.html5rocks.com/en/tutorials/getusermedia/intro/" target="_blank" rel="external">Capturing Audio &amp; Video in HTML5</a><br>[5]Sam Dutton, <a href="http://www.html5rocks.com/en/tutorials/webrtc/basics/" target="_blank" rel="external">Getting Started with WebRTC</a><br>[6]Dan Ristic, <a href="http://www.html5rocks.com/en/tutorials/webrtc/datachannels/" target="_blank" rel="external">WebRTC data channels</a><br>[7]Justin Uberti, Sam Dutton, <a href="http://io13webrtc.appspot.com/" target="_blank" rel="external">WebRTC: Plugin-free realtime communication</a><br>[8]Mozilla Developer Network, <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/WebRTC/Taking_webcam_photos" target="_blank" rel="external">Taking webcam photos</a><br>[9]Sam Dutton, <a href="http://www.html5rocks.com/en/tutorials/webrtc/infrastructure/" target="_blank" rel="external">WebRTC in the real world: STUN, TURN and signaling</a>  </p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/WebRTC/">WebRTC</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/javascript/">javascript</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://www.m4ster.net/2015/01/28/【转载】WebRTC简介/" data-title="【转载】WebRTC简介 | M4ster&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/01/28/使用JavaScript获取本地和公网IP/"  title="使用JavaScript获取本地和公网IP">
+ <strong>NEXT:</strong><br/> 
+ <span>使用JavaScript获取本地和公网IP
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment" id="comments">
+	<div class="ds-thread" data-title="【转载】WebRTC简介" data-url="http://www.m4ster.net/2015/01/28/【转载】WebRTC简介/"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getUserMedia"><span class="toc-number">2.</span> <span class="toc-text">getUserMedia</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#概述-1"><span class="toc-number">2.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#范例：获取摄像头"><span class="toc-number">2.2.</span> <span class="toc-text">范例：获取摄像头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#范例：捕获麦克风声音"><span class="toc-number">2.3.</span> <span class="toc-text">范例：捕获麦克风声音</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#捕获的限定条件"><span class="toc-number">2.4.</span> <span class="toc-text">捕获的限定条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MediaStreamTrack-getSources()"><span class="toc-number">2.5.</span> <span class="toc-text">MediaStreamTrack.getSources()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RTCPeerConnectionl，RTCDataChannel"><span class="toc-number">3.</span> <span class="toc-text">RTCPeerConnectionl，RTCDataChannel</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RTCPeerConnectionl"><span class="toc-number">3.1.</span> <span class="toc-text">RTCPeerConnectionl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RTCDataChannel"><span class="toc-number">3.2.</span> <span class="toc-text">RTCDataChannel</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#外部函数库"><span class="toc-number">3.3.</span> <span class="toc-text">外部函数库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考链接"><span class="toc-number">3.4.</span> <span class="toc-text">参考链接</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/javascript/" title="javascript">javascript<sup>2</sup></a></li>
+		
+			<li><a href="/categories/脚本语言/" title="脚本语言">脚本语言<sup>1</sup></a></li>
+		
+			<li><a href="/categories/读书笔记/" title="读书笔记">读书笔记<sup>7</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/WebRTC/" title="WebRTC">WebRTC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/XSS/" title="XSS">XSS<sup>9</sup></a></li>
+		
+			<li><a href="/tags/跨站攻击/" title="跨站攻击">跨站攻击<sup>9</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="widget-wrap">
+    <p class="asidetitle">最近访客</p>
+    <div class="widget">
+	  <ul class="ds-recent-visitors" data-num-items="12"></ul>
+	</div>
+  </div>
+
+
+  
+  <div class="widget-wrap">
+    <p class="asidetitle">最近评论</p>
+    <div class="widget">
+	  <div class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+	</div>
+  </div>
+
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://yangjian.me" target="_blank" title="YangJian">Alimon's Blog</a></li>
+      <li><a href="http://sqzr.cc" target="_blank" title="sqzr">sqzr&#39;s blog</a></li>
+      <li><a href="http://www.php90.cn" target="_blank" title="心东">心东&#39;s blog</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="http://www.m4ster.net/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer>
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"m4ster"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+<!-- 多说公共JS代码 end -->
+<div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m M4ster. <br/>
+			This is my blog i&#39;d like to share with you at this blog.</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/m4ster" target="_blank" title="weibo"></a>
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://www.m4ster.net" target="_blank" title="M4ster">M4ster</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"m4ster"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

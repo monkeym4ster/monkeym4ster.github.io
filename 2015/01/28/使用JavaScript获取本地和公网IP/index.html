@@ -9,10 +9,10 @@
     
     <meta name="author" content="M4ster">
     
-    <meta name="description" content="前些天老外发出了一个脚本，让支持WebRTC的浏览器可以向STUN服务器请求，返回内外网IP。
+    <meta name="description" content="前些天老外发出了一个脚本，可以使用JavaScript获取真实的内网IP和外网IP。
 
 webrtc-ips：
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849">
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515">
     
     
     
@@ -81,7 +81,7 @@ webrtc-ips：
     </p>
   <p class="article-time">
     <time datetime="2015-01-28T02:44:50.000Z" itemprop="datePublished">2015年01月28日</time>
-    更新日期:<time datetime="2015-01-28T02:57:01.000Z" itemprop="dateModified">2015年01月28日</time>
+    更新日期:<time datetime="2015-01-28T03:26:10.000Z" itemprop="dateModified">2015年01月28日</time>
     
   </p>
 </header>
@@ -90,18 +90,27 @@ webrtc-ips：
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#webrtc-ips："><span class="toc-number">1.</span> <span class="toc-text">webrtc-ips：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析脚本"><span class="toc-number">2.</span> <span class="toc-text">分析脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解读代码"><span class="toc-number">2.1.</span> <span class="toc-text">解读代码</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#webrtc-ips："><span class="toc-number">1.</span> <span class="toc-text">webrtc-ips：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析脚本"><span class="toc-number">2.</span> <span class="toc-text">分析脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解读代码"><span class="toc-number">2.1.</span> <span class="toc-text">解读代码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ip_dups"><span class="toc-number">2.1.1.</span> <span class="toc-text">ip_dups</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RTCPeerConnection"><span class="toc-number">2.1.2.</span> <span class="toc-text">RTCPeerConnection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mediaConstraints"><span class="toc-number">2.1.3.</span> <span class="toc-text">mediaConstraints</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Other"><span class="toc-number">3.</span> <span class="toc-text">Other</span></a></li></ol>
 		</div>
 		
 		<blockquote>
-<p>前些天老外发出了一个脚本，让支持WebRTC的浏览器可以向STUN服务器请求，返回内外网IP。</p>
+<p>前些天老外发出了一个脚本，可以使用JavaScript获取真实的内网IP和外网IP。</p>
 </blockquote>
 <h2 id="webrtc-ips：">webrtc-ips：</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//get the IP addresses associated with an account </span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getIPs</span><span class="params">(callback)</span></span>{ </div><div class="line">    <span class="keyword">var</span> ip_dups = {}; </div><div class="line"></div><div class="line">    <span class="comment">//compatibility for firefox and chrome </span></div><div class="line">    <span class="keyword">var</span> RTCPeerConnection = <span class="built_in">window</span>.RTCPeerConnection </div><div class="line">        || <span class="built_in">window</span>.mozRTCPeerConnection </div><div class="line">        || <span class="built_in">window</span>.webkitRTCPeerConnection; </div><div class="line">    <span class="keyword">var</span> mediaConstraints = { </div><div class="line">        optional: [{RtpDataChannels: <span class="literal">true</span>}] </div><div class="line">    }; </div><div class="line"></div><div class="line">    <span class="comment">//firefox already has a default stun server in about:config </span></div><div class="line">    <span class="comment">//    media.peerconnection.default_iceservers = </span></div><div class="line">    <span class="comment">//    [{"url": "stun:stun.services.mozilla.com"}] </span></div><div class="line">    <span class="keyword">var</span> servers = <span class="literal">undefined</span>; </div><div class="line"></div><div class="line">    <span class="comment">//add same stun server for chrome </span></div><div class="line">    <span class="keyword">if</span>(<span class="built_in">window</span>.webkitRTCPeerConnection) </div><div class="line">        servers = {iceServers: [{urls: <span class="string">"stun:stun.services.mozilla.com"</span>}]}; </div><div class="line"></div><div class="line">    <span class="comment">//construct a new RTCPeerConnection </span></div><div class="line">    <span class="keyword">var</span> pc = <span class="keyword">new</span> RTCPeerConnection(servers, mediaConstraints); </div><div class="line"></div><div class="line">    <span class="comment">//listen for candidate events </span></div><div class="line">    pc.onicecandidate = <span class="function"><span class="keyword">function</span><span class="params">(ice)</span></span>{ </div><div class="line"></div><div class="line">        <span class="comment">//skip non-candidate events </span></div><div class="line">        <span class="keyword">if</span>(ice.candidate){ </div><div class="line"></div><div class="line">            <span class="comment">//match just the IP address </span></div><div class="line">            <span class="keyword">var</span> ip_regex = <span class="regexp">/([0-9]{1,3}(\.[0-9]{1,3}){3})/</span> </div><div class="line">            <span class="keyword">var</span> ip_addr = ip_regex.exec(ice.candidate.candidate)[<span class="number">1</span>]; </div><div class="line"></div><div class="line">            <span class="comment">//remove duplicates </span></div><div class="line">            <span class="keyword">if</span>(ip_dups[ip_addr] === <span class="literal">undefined</span>) </div><div class="line">                callback(ip_addr); </div><div class="line"></div><div class="line">            ip_dups[ip_addr] = <span class="literal">true</span>; </div><div class="line">        } </div><div class="line">    }; </div><div class="line"></div><div class="line">    <span class="comment">//create a bogus data channel </span></div><div class="line">    pc.createDataChannel(<span class="string">""</span>); </div><div class="line"></div><div class="line">    <span class="comment">//create an offer sdp </span></div><div class="line">    pc.createOffer(<span class="function"><span class="keyword">function</span><span class="params">(result)</span></span>{ </div><div class="line"></div><div class="line">        <span class="comment">//trigger the stun server request </span></div><div class="line">        pc.setLocalDescription(result, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}); </div><div class="line"></div><div class="line">    }, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}); </div><div class="line">} </div><div class="line"></div><div class="line"><span class="comment">//Test: Print the IP addresses into the console </span></div><div class="line">getIPs(<span class="function"><span class="keyword">function</span><span class="params">(ip)</span></span>{<span class="built_in">console</span>.log(ip);});</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//from:https://github.com/diafygi/webrtc-ips</span></div><div class="line"><span class="comment">//get the IP addresses associated with an account </span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getIPs</span><span class="params">(callback)</span></span>{ </div><div class="line">    <span class="keyword">var</span> ip_dups = {}; </div><div class="line">            </div><div class="line">    <span class="comment">//compatibility for firefox and chrome </span></div><div class="line">    <span class="keyword">var</span> RTCPeerConnection = <span class="built_in">window</span>.RTCPeerConnection </div><div class="line">        || <span class="built_in">window</span>.mozRTCPeerConnection </div><div class="line">        || <span class="built_in">window</span>.webkitRTCPeerConnection; </div><div class="line">    <span class="keyword">var</span> mediaConstraints = { </div><div class="line">        optional: [{RtpDataChannels: <span class="literal">true</span>}] </div><div class="line">    }; </div><div class="line"></div><div class="line">    <span class="comment">//firefox already has a default stun server in about:config </span></div><div class="line">    <span class="comment">//    media.peerconnection.default_iceservers = </span></div><div class="line">    <span class="comment">//    [{"url": "stun:stun.services.mozilla.com"}] </span></div><div class="line">    <span class="keyword">var</span> servers = <span class="literal">undefined</span>; </div><div class="line"></div><div class="line">    <span class="comment">//add same stun server for chrome </span></div><div class="line">    <span class="keyword">if</span>(<span class="built_in">window</span>.webkitRTCPeerConnection) </div><div class="line">        servers = {iceServers: [{urls: <span class="string">"stun:stun.services.mozilla.com"</span>}]}; </div><div class="line"></div><div class="line">    <span class="comment">//construct a new RTCPeerConnection </span></div><div class="line">    <span class="keyword">var</span> pc = <span class="keyword">new</span> RTCPeerConnection(servers, mediaConstraints); </div><div class="line"></div><div class="line">    <span class="comment">//listen for candidate events </span></div><div class="line">    pc.onicecandidate = <span class="function"><span class="keyword">function</span><span class="params">(ice)</span></span>{ </div><div class="line"></div><div class="line">        <span class="comment">//skip non-candidate events </span></div><div class="line">        <span class="keyword">if</span>(ice.candidate){ </div><div class="line"></div><div class="line">            <span class="comment">//match just the IP address </span></div><div class="line">            <span class="keyword">var</span> ip_regex = <span class="regexp">/([0-9]{1,3}(\.[0-9]{1,3}){3})/</span> </div><div class="line">            <span class="keyword">var</span> ip_addr = ip_regex.exec(ice.candidate.candidate)[<span class="number">1</span>]; </div><div class="line"></div><div class="line">            <span class="comment">//remove duplicates </span></div><div class="line">            <span class="keyword">if</span>(ip_dups[ip_addr] === <span class="literal">undefined</span>) </div><div class="line">                callback(ip_addr); </div><div class="line"></div><div class="line">            ip_dups[ip_addr] = <span class="literal">true</span>; </div><div class="line">        } </div><div class="line">    }; </div><div class="line"></div><div class="line">    <span class="comment">//create a bogus data channel </span></div><div class="line">    pc.createDataChannel(<span class="string">""</span>); </div><div class="line"></div><div class="line">    <span class="comment">//create an offer sdp </span></div><div class="line">    pc.createOffer(<span class="function"><span class="keyword">function</span><span class="params">(result)</span></span>{ </div><div class="line"></div><div class="line">        <span class="comment">//trigger the stun server request </span></div><div class="line">        pc.setLocalDescription(result, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}); </div><div class="line"></div><div class="line">    }, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}); </div><div class="line">} </div><div class="line"></div><div class="line"><span class="comment">//Test: Print the IP addresses into the console </span></div><div class="line">getIPs(<span class="function"><span class="keyword">function</span><span class="params">(ip)</span></span>{<span class="built_in">console</span>.log(ip);});</div></pre></td></tr></table></figure>
 
 <h2 id="分析脚本">分析脚本</h2>
 <h3 id="解读代码">解读代码</h3>
-<p>首先，作者定义了一个getIPs函数，函数执行后返回的是一个callback结果。</p>
+<p>首先，作者定义了一个getIPs函数，函数执行后返回的是一个callback结果。<br>函数中又定义了ip_dups、RTCPeerConnection、mediaConstraints、servers、pc、ip_regex、ip_addr几个参数。</p>
+<h4 id="ip_dups">ip_dups</h4>
+<blockquote>
+<p>……</p>
+</blockquote>
+<h4 id="RTCPeerConnection">RTCPeerConnection</h4>
+<p>将WebRTC对象复制给此参数</p>
+<h4 id="mediaConstraints">mediaConstraints</h4>
+<p>设置RtpDataChannels参数为true</p>
+<h2 id="Other">Other</h2>
 <blockquote>
 <p>待续……</p>
 </blockquote>
@@ -133,6 +142,14 @@ webrtc-ips：
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2015/01/28/【转载】WebRTC简介/" title="【转载】WebRTC简介">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  【转载】WebRTC简介</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（六）/"  title="《XSS跨站脚本攻击剖析与防御》学习笔记（六）">
@@ -154,7 +171,7 @@ webrtc-ips：
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#webrtc-ips："><span class="toc-number">1.</span> <span class="toc-text">webrtc-ips：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析脚本"><span class="toc-number">2.</span> <span class="toc-text">分析脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解读代码"><span class="toc-number">2.1.</span> <span class="toc-text">解读代码</span></a></li></ol></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#webrtc-ips："><span class="toc-number">1.</span> <span class="toc-text">webrtc-ips：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析脚本"><span class="toc-number">2.</span> <span class="toc-text">分析脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解读代码"><span class="toc-number">2.1.</span> <span class="toc-text">解读代码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ip_dups"><span class="toc-number">2.1.1.</span> <span class="toc-text">ip_dups</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RTCPeerConnection"><span class="toc-number">2.1.2.</span> <span class="toc-text">RTCPeerConnection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mediaConstraints"><span class="toc-number">2.1.3.</span> <span class="toc-text">mediaConstraints</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Other"><span class="toc-number">3.</span> <span class="toc-text">Other</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -166,7 +183,7 @@ webrtc-ips：
 	<p class="asidetitle">分类</p>
 		<ul>
 		
-			<li><a href="/categories/javascript/" title="javascript">javascript<sup>1</sup></a></li>
+			<li><a href="/categories/javascript/" title="javascript">javascript<sup>2</sup></a></li>
 		
 			<li><a href="/categories/脚本语言/" title="脚本语言">脚本语言<sup>1</sup></a></li>
 		
@@ -180,6 +197,8 @@ webrtc-ips：
 <div class="tagslist">
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
+		
+			<li><a href="/tags/WebRTC/" title="WebRTC">WebRTC<sup>1</sup></a></li>
 		
 			<li><a href="/tags/XSS/" title="XSS">XSS<sup>9</sup></a></li>
 		
