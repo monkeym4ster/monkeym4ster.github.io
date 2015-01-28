@@ -4,7 +4,7 @@
   <subtitle><![CDATA[分享学习和生活中的点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.m4ster.net/"/>
-  <updated>2015-01-28T07:32:12.648Z</updated>
+  <updated>2015-01-28T17:58:39.130Z</updated>
   <id>http://www.m4ster.net/</id>
   
   <author>
@@ -19,9 +19,9 @@
     <link href="http://www.m4ster.net/2015/01/28/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91WebRTC%E7%AE%80%E4%BB%8B/"/>
     <id>http://www.m4ster.net/2015/01/28/【转载】WebRTC简介/</id>
     <published>2015-01-28T03:27:29.000Z</published>
-    <updated>2015-01-28T07:32:02.000Z</updated>
+    <updated>2015-01-28T17:58:26.000Z</updated>
     <content type="html"><![CDATA[<h2 id="概述">概述</h2>
-<p>WebRTC是“网络实时通信”（Web Real Time Communication）的缩写。它最初是为了解决浏览器上视频通话而提出的，即两个浏览器之间直接进行视频和音频的通信，不经过服务器。后来发展到除了音频和视频，还可以传输文字和其他数据。<br>Google是WebRTC的主要支持者和开发者，它最初在Gmail上推出了视频聊天，后来在2011年推出了Hangouts，语序在浏览器中打电话。它推动了WebRTC标准的确立。<br>WebRTC主要让浏览器具备三个作用。  </p>
+<p>WebRTC是“网络实时通信”（Web Real Time Communication）的缩写。它最初是为了解决浏览器上视频通话而提出的，即两个浏览器之间直接进行视频和音频的通信，不经过服务器。后来发展到除了音频和视频，还可以传输文字和其他数据。<br>Google是WebRTC的主要支持者和开发者，它最初在Gmail上推出了视频聊天，后来在2011年推出了Hangouts，语音在浏览器中打电话。它推动了WebRTC标准的确立。<br>WebRTC主要让浏览器具备三个作用。  </p>
 <blockquote>
 <p>获取音频和视频<br>进行音频和视频通信<br>进行任意数据的通信  </p>
 </blockquote>
@@ -32,7 +32,7 @@
 <h2 id="getUserMedia">getUserMedia</h2>
 <h3 id="概述-1">概述</h3>
 <p>navigator.getUserMedia方法目前主要用于，在浏览器中获取音频（通过麦克风）和视频（通过摄像头），将来可以用于获取任意数据流，比如光盘和传感器。<br>下面的代码用于检查浏览器是否支持getUserMedia方法。  </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">navigator.getUserMedia  = navigator.getUserMedia <span class="string">||</span></div><div class="line">                          navigator.webkitGetUserMedia <span class="string">||</span></div><div class="line">                          navigator.mozGetUserMedia <span class="string">||</span></div><div class="line">                          navigator.msGetUserMedia;</div><div class="line"></div><div class="line">if (navigator.getUserMedia) {</div><div class="line">    <span class="comment">// 支持</span></div><div class="line">} else {</div><div class="line">    <span class="comment">// 不支持</span></div><div class="line">}</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">navigator.getUserMedia  = navigator.getUserMedia ||</div><div class="line">                          navigator.webkitGetUserMedia ||</div><div class="line">                          navigator.mozGetUserMedia ||</div><div class="line">                          navigator.msGetUserMedia;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (navigator.getUserMedia) {</div><div class="line">    <span class="comment">// 支持</span></div><div class="line">    alert(<span class="string">'支持'</span>)</div><div class="line">} <span class="keyword">else</span> {</div><div class="line">    <span class="comment">// 不支持</span></div><div class="line">    alert(<span class="string">'不支持'</span>)</div><div class="line">}</div></pre></td></tr></table></figure>
 
 <p>Chrome 21, Opera 18和Firefox 17，支持该方法。目前，IE还不支持，上面代码中的msGetUserMedia，只是为了确保将来的兼容。<br>getUserMedia方法接受三个参数。 </p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">navigator</span><span class="class">.getUserMedia</span>(<span class="rules">{</span></div><div class="line">    <span class="rule"><span class="attribute">video</span>:<span class="value"> true, </span></span></div><div class="line">    audio: true</div><div class="line">}, <span class="tag">onSuccess</span>, <span class="tag">onError</span>);</div></pre></td></tr></table></figure>
@@ -103,7 +103,7 @@
 
 <h2 id="参考链接">参考链接</h2>
 <p>[1]Andi Smith，<a href="http://www.netmagazine.com/tutorials/get-started-webrtc" target="_blank" rel="external">Get Started with WebRTC</a><br>[2]Thibault Imbert, <a href="http://typedarray.org/from-microphone-to-wav-with-getusermedia-and-web-audio/" target="_blank" rel="external">From microphone to .WAV with: getUserMedia and Web Audio</a><br>[3]Ian Devlin, <a href="http://html5hub.com/using-the-getusermedia-api-with-the-html5-video-and-canvas-elements/#i.bz41ehmmhd3311" target="_blank" rel="external">Using the getUserMedia API with the HTML5 video and canvas elements</a><br>[4]Eric Bidelman, <a href="http://www.html5rocks.com/en/tutorials/getusermedia/intro/" target="_blank" rel="external">Capturing Audio &amp; Video in HTML5</a><br>[5]Sam Dutton, <a href="http://www.html5rocks.com/en/tutorials/webrtc/basics/" target="_blank" rel="external">Getting Started with WebRTC</a><br>[6]Dan Ristic, <a href="http://www.html5rocks.com/en/tutorials/webrtc/datachannels/" target="_blank" rel="external">WebRTC data channels</a><br>[7]Justin Uberti, Sam Dutton, <a href="http://io13webrtc.appspot.com/" target="_blank" rel="external">WebRTC: Plugin-free realtime communication</a><br>[8]Mozilla Developer Network, <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/WebRTC/Taking_webcam_photos" target="_blank" rel="external">Taking webcam photos</a><br>[9]Sam Dutton, <a href="http://www.html5rocks.com/en/tutorials/webrtc/infrastructure/" target="_blank" rel="external">WebRTC in the real world: STUN, TURN and signaling</a>  </p>
-<h2 id="from">from</h2>
+<h2 id="来源">来源</h2>
 <blockquote>
 <p><a href="http://javascript.ruanyifeng.com/htmlapi/webrtc.html" target="_blank" rel="external">http://javascript.ruanyifeng.com/htmlapi/webrtc.html</a></p>
 </blockquote>
