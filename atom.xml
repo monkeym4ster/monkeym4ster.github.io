@@ -4,7 +4,7 @@
   <subtitle><![CDATA[分享学习和生活中的点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.m4ster.net/"/>
-  <updated>2015-01-28T17:58:39.130Z</updated>
+  <updated>2015-01-29T15:34:15.572Z</updated>
   <id>http://www.m4ster.net/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://www.m4ster.net/2015/01/28/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91WebRTC%E7%AE%80%E4%BB%8B/"/>
     <id>http://www.m4ster.net/2015/01/28/【转载】WebRTC简介/</id>
     <published>2015-01-28T03:27:29.000Z</published>
-    <updated>2015-01-28T17:58:26.000Z</updated>
+    <updated>2015-01-28T18:00:51.000Z</updated>
     <content type="html"><![CDATA[<h2 id="概述">概述</h2>
 <p>WebRTC是“网络实时通信”（Web Real Time Communication）的缩写。它最初是为了解决浏览器上视频通话而提出的，即两个浏览器之间直接进行视频和音频的通信，不经过服务器。后来发展到除了音频和视频，还可以传输文字和其他数据。<br>Google是WebRTC的主要支持者和开发者，它最初在Gmail上推出了视频聊天，后来在2011年推出了Hangouts，语音在浏览器中打电话。它推动了WebRTC标准的确立。<br>WebRTC主要让浏览器具备三个作用。  </p>
 <blockquote>
@@ -124,27 +124,72 @@
     <link href="http://www.m4ster.net/2015/01/28/%E4%BD%BF%E7%94%A8JavaScript%E8%8E%B7%E5%8F%96%E6%9C%AC%E5%9C%B0%E5%92%8C%E5%85%AC%E7%BD%91IP/"/>
     <id>http://www.m4ster.net/2015/01/28/使用JavaScript获取本地和公网IP/</id>
     <published>2015-01-28T02:44:50.000Z</published>
-    <updated>2015-01-28T03:26:10.000Z</updated>
+    <updated>2015-01-29T15:33:48.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>前些天老外发出了一个脚本，可以使用JavaScript获取真实的内网IP和外网IP。</p>
 </blockquote>
 <h2 id="webrtc-ips：">webrtc-ips：</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//from:https://github.com/diafygi/webrtc-ips</span></div><div class="line"><span class="comment">//get the IP addresses associated with an account </span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getIPs</span><span class="params">(callback)</span></span>{ </div><div class="line">    <span class="keyword">var</span> ip_dups = {}; </div><div class="line">            </div><div class="line">    <span class="comment">//compatibility for firefox and chrome </span></div><div class="line">    <span class="keyword">var</span> RTCPeerConnection = <span class="built_in">window</span>.RTCPeerConnection </div><div class="line">        || <span class="built_in">window</span>.mozRTCPeerConnection </div><div class="line">        || <span class="built_in">window</span>.webkitRTCPeerConnection; </div><div class="line">    <span class="keyword">var</span> mediaConstraints = { </div><div class="line">        optional: [{RtpDataChannels: <span class="literal">true</span>}] </div><div class="line">    }; </div><div class="line"></div><div class="line">    <span class="comment">//firefox already has a default stun server in about:config </span></div><div class="line">    <span class="comment">//    media.peerconnection.default_iceservers = </span></div><div class="line">    <span class="comment">//    [{"url": "stun:stun.services.mozilla.com"}] </span></div><div class="line">    <span class="keyword">var</span> servers = <span class="literal">undefined</span>; </div><div class="line"></div><div class="line">    <span class="comment">//add same stun server for chrome </span></div><div class="line">    <span class="keyword">if</span>(<span class="built_in">window</span>.webkitRTCPeerConnection) </div><div class="line">        servers = {iceServers: [{urls: <span class="string">"stun:stun.services.mozilla.com"</span>}]}; </div><div class="line"></div><div class="line">    <span class="comment">//construct a new RTCPeerConnection </span></div><div class="line">    <span class="keyword">var</span> pc = <span class="keyword">new</span> RTCPeerConnection(servers, mediaConstraints); </div><div class="line"></div><div class="line">    <span class="comment">//listen for candidate events </span></div><div class="line">    pc.onicecandidate = <span class="function"><span class="keyword">function</span><span class="params">(ice)</span></span>{ </div><div class="line"></div><div class="line">        <span class="comment">//skip non-candidate events </span></div><div class="line">        <span class="keyword">if</span>(ice.candidate){ </div><div class="line"></div><div class="line">            <span class="comment">//match just the IP address </span></div><div class="line">            <span class="keyword">var</span> ip_regex = <span class="regexp">/([0-9]{1,3}(\.[0-9]{1,3}){3})/</span> </div><div class="line">            <span class="keyword">var</span> ip_addr = ip_regex.exec(ice.candidate.candidate)[<span class="number">1</span>]; </div><div class="line"></div><div class="line">            <span class="comment">//remove duplicates </span></div><div class="line">            <span class="keyword">if</span>(ip_dups[ip_addr] === <span class="literal">undefined</span>) </div><div class="line">                callback(ip_addr); </div><div class="line"></div><div class="line">            ip_dups[ip_addr] = <span class="literal">true</span>; </div><div class="line">        } </div><div class="line">    }; </div><div class="line"></div><div class="line">    <span class="comment">//create a bogus data channel </span></div><div class="line">    pc.createDataChannel(<span class="string">""</span>); </div><div class="line"></div><div class="line">    <span class="comment">//create an offer sdp </span></div><div class="line">    pc.createOffer(<span class="function"><span class="keyword">function</span><span class="params">(result)</span></span>{ </div><div class="line"></div><div class="line">        <span class="comment">//trigger the stun server request </span></div><div class="line">        pc.setLocalDescription(result, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}); </div><div class="line"></div><div class="line">    }, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}); </div><div class="line">} </div><div class="line"></div><div class="line"><span class="comment">//Test: Print the IP addresses into the console </span></div><div class="line">getIPs(<span class="function"><span class="keyword">function</span><span class="params">(ip)</span></span>{<span class="built_in">console</span>.log(ip);});</div></pre></td></tr></table></figure>
+<pre><code><span class="comment">//get the IP addresses associated with an account </span>
+<span class="function"><span class="keyword">function</span> <span class="title">getIPs</span><span class="params">(callback)</span></span>{ 
+    <span class="keyword">var</span> ip_dups = {}; 
 
-<h2 id="分析脚本">分析脚本</h2>
-<h3 id="解读代码">解读代码</h3>
-<p>首先，作者定义了一个getIPs函数，函数执行后返回的是一个callback结果。<br>函数中又定义了ip_dups、RTCPeerConnection、mediaConstraints、servers、pc、ip_regex、ip_addr几个参数。</p>
-<h4 id="ip_dups">ip_dups</h4>
+    <span class="comment">//compatibility for firefox and chrome </span>
+    <span class="keyword">var</span> RTCPeerConnection = <span class="built_in">window</span>.RTCPeerConnection 
+        || <span class="built_in">window</span>.mozRTCPeerConnection 
+        || <span class="built_in">window</span>.webkitRTCPeerConnection; 
+    <span class="keyword">var</span> mediaConstraints = { 
+        optional: [{RtpDataChannels: <span class="literal">true</span>}] 
+    }; 
+
+    <span class="comment">//firefox already has a default stun server in about:config </span>
+    <span class="comment">//    media.peerconnection.default_iceservers = </span>
+    <span class="comment">//    [{"url": "stun:stun.services.mozilla.com"}] </span>
+    <span class="keyword">var</span> servers = <span class="literal">undefined</span>; 
+
+    <span class="comment">//add same stun server for chrome </span>
+    <span class="keyword">if</span>(<span class="built_in">window</span>.webkitRTCPeerConnection) 
+        servers = {iceServers: [{urls: <span class="string">"stun:stun.services.mozilla.com"</span>}]}; 
+
+    <span class="comment">//construct a new RTCPeerConnection </span>
+    <span class="keyword">var</span> pc = <span class="keyword">new</span> RTCPeerConnection(servers, mediaConstraints); 
+
+    <span class="comment">//listen for candidate events </span>
+    pc.onicecandidate = <span class="function"><span class="keyword">function</span><span class="params">(ice)</span></span>{ 
+
+        <span class="comment">//skip non-candidate events </span>
+        <span class="keyword">if</span>(ice.candidate){ 
+
+            <span class="comment">//match just the IP address </span>
+            <span class="keyword">var</span> ip_regex = <span class="regexp">/([0-9]{1,3}(\.[0-9]{1,3}){3})/</span> 
+            <span class="keyword">var</span> ip_addr = ip_regex.exec(ice.candidate.candidate)[<span class="number">1</span>]; 
+
+            <span class="comment">//remove duplicates </span>
+            <span class="keyword">if</span>(ip_dups[ip_addr] === <span class="literal">undefined</span>) 
+                callback(ip_addr); 
+
+            ip_dups[ip_addr] = <span class="literal">true</span>; 
+        } 
+    }; 
+
+    <span class="comment">//create a bogus data channel </span>
+    pc.createDataChannel(<span class="string">""</span>); 
+
+    <span class="comment">//create an offer sdp </span>
+    pc.createOffer(<span class="function"><span class="keyword">function</span><span class="params">(result)</span></span>{ 
+
+        <span class="comment">//trigger the stun server request </span>
+        pc.setLocalDescription(result, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}); 
+
+    }, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}); 
+} 
+
+<span class="comment">//Test: Print the IP addresses into the console </span>
+getIPs(<span class="function"><span class="keyword">function</span><span class="params">(ip)</span></span>{<span class="built_in">console</span>.log(ip);});
+</code></pre><h2 id="分析脚本">分析脚本</h2>
+<p>Firefox 跟 Chrome支持WebRTC可以向STUN服务器请求，返回内外网IP，不同于XMLHttpRequest请求，STUN请求开发者工具当中看不到网络请求的。</p>
+<h2 id="From">From</h2>
 <blockquote>
-<p>……</p>
-</blockquote>
-<h4 id="RTCPeerConnection">RTCPeerConnection</h4>
-<p>将WebRTC对象复制给此参数</p>
-<h4 id="mediaConstraints">mediaConstraints</h4>
-<p>设置RtpDataChannels参数为true</p>
-<h2 id="Other">Other</h2>
-<blockquote>
-<p>待续……</p>
+<p><a href="https://github.com/diafygi/webrtc-ips" target="_blank" rel="external">https://github.com/diafygi/webrtc-ips</a></p>
 </blockquote>
 ]]></content>
     <summary type="html">
@@ -152,7 +197,7 @@
 <p>前些天老外发出了一个脚本，可以使用JavaScript获取真实的内网IP和外网IP。</p>
 </blockquote>
 <h2 id="webrtc-ips：">webrtc-ips：</h2>
-<figure class="highlight"]]>
+<pre><code><span class="c]]>
     </summary>
     
       <category term="XSS" scheme="http://www.m4ster.net/tags/XSS/"/>
