@@ -4,7 +4,7 @@
   <subtitle><![CDATA[分享学习和生活中的点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.m4ster.net/"/>
-  <updated>2015-02-03T13:15:08.798Z</updated>
+  <updated>2015-03-06T02:43:39.915Z</updated>
   <id>http://www.m4ster.net/</id>
   
   <author>
@@ -18,7 +18,7 @@
     <title><![CDATA[【转载】WebRTC简介]]></title>
     <link href="http://www.m4ster.net/2015/01/28/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91WebRTC%E7%AE%80%E4%BB%8B/"/>
     <id>http://www.m4ster.net/2015/01/28/【转载】WebRTC简介/</id>
-    <published>2015-01-28T03:27:29.000Z</published>
+    <published>2015-01-28T05:27:29.000Z</published>
     <updated>2015-01-28T18:00:51.000Z</updated>
     <content type="html"><![CDATA[<h2 id="概述">概述</h2>
 <p>WebRTC是“网络实时通信”（Web Real Time Communication）的缩写。它最初是为了解决浏览器上视频通话而提出的，即两个浏览器之间直接进行视频和音频的通信，不经过服务器。后来发展到除了音频和视频，还可以传输文字和其他数据。<br>Google是WebRTC的主要支持者和开发者，它最初在Gmail上推出了视频聊天，后来在2011年推出了Hangouts，语音在浏览器中打电话。它推动了WebRTC标准的确立。<br>WebRTC主要让浏览器具备三个作用。  </p>
@@ -123,7 +123,7 @@
     <title><![CDATA[使用JavaScript获取本地和公网IP]]></title>
     <link href="http://www.m4ster.net/2015/01/28/%E4%BD%BF%E7%94%A8JavaScript%E8%8E%B7%E5%8F%96%E6%9C%AC%E5%9C%B0%E5%92%8C%E5%85%AC%E7%BD%91IP/"/>
     <id>http://www.m4ster.net/2015/01/28/使用JavaScript获取本地和公网IP/</id>
-    <published>2015-01-28T02:44:50.000Z</published>
+    <published>2015-01-28T04:44:50.000Z</published>
     <updated>2015-01-30T02:00:43.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>前些天老外发出了一个脚本，可以使用JavaScript获取真实的内网IP和外网IP。</p>
@@ -212,7 +212,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（六）]]></title>
     <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（六）/</id>
-    <published>2014-12-30T07:05:37.000Z</published>
+    <published>2014-12-30T09:05:37.000Z</published>
     <updated>2014-12-30T16:27:32.000Z</updated>
     <content type="html"><![CDATA[<h2 id="黑盒手动测试">黑盒手动测试</h2>
 <p>在黑盒环境下，除了使用Web安全检测工具进行自动化测试，还可以依靠人工形式发掘跨站脚本漏洞。<br>针对页面的输入框进行测试，可以输入一些能触发XSS的敏感字符，如：  </p>
@@ -252,7 +252,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（五）]]></title>
     <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（五）/</id>
-    <published>2014-12-30T06:27:37.000Z</published>
+    <published>2014-12-30T08:27:37.000Z</published>
     <updated>2014-12-30T07:03:07.000Z</updated>
     <content type="html"><![CDATA[<h2 id="网络钓鱼">网络钓鱼</h2>
 <p>网络钓鱼是一种利用网络进行诈骗的手段，主要通过对受害者心理弱点、好奇心、信任度等心理陷阱来实现诈骗，属于社会工程学的一种。</p>
@@ -296,7 +296,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（四）]]></title>
     <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（四）/</id>
-    <published>2014-12-30T05:32:15.000Z</published>
+    <published>2014-12-30T07:32:15.000Z</published>
     <updated>2014-12-30T06:26:54.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Cookie基础介绍">Cookie基础介绍</h2>
 <p>Cookie是用户浏览网页时网站存储在用户机器上的小文本文件，文件里记录了与用户相关的一些状态或设置，比如用户名、ID、访问次数等。当用户下一次访问这个网站的时候，网站会先访问用户机器上对应的该网站的Cookie文件，并从中读取信息，以便用户实现快速访问。</p>
@@ -336,7 +336,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（三）]]></title>
     <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（三）/</id>
-    <published>2014-12-30T01:49:29.000Z</published>
+    <published>2014-12-30T03:49:29.000Z</published>
     <updated>2014-12-30T03:31:29.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Shellcode">Shellcode</h2>
 <p>在跨站脚本当中，是指JS等脚本编写的XSS利用代码</p>
@@ -400,7 +400,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（二）]]></title>
     <link href="http://www.m4ster.net/2014/12/26/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/26/《XSS跨站脚本攻击剖析与防御》学习笔记（二）/</id>
-    <published>2014-12-26T07:57:01.000Z</published>
+    <published>2014-12-26T09:57:01.000Z</published>
     <updated>2014-12-26T10:20:10.000Z</updated>
     <content type="html"><![CDATA[<h2 id="XSS构造剖析">XSS构造剖析</h2>
 <blockquote>
@@ -529,7 +529,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[XSS跨站测试语句：XSS Cheat Sheet]]></title>
     <link href="http://www.m4ster.net/2014/12/25/XSS%E8%B7%A8%E7%AB%99%E6%B5%8B%E8%AF%95%E8%AF%AD%E5%8F%A5%EF%BC%9AXSS-Cheat-Sheet/"/>
     <id>http://www.m4ster.net/2014/12/25/XSS跨站测试语句：XSS-Cheat-Sheet/</id>
-    <published>2014-12-25T13:29:09.000Z</published>
+    <published>2014-12-25T15:29:09.000Z</published>
     <updated>2014-12-25T13:36:14.000Z</updated>
     <content type="html"><![CDATA[<h2 id="XSS_Cheat_Sheet">XSS Cheat Sheet</h2>
 <blockquote>
@@ -559,7 +559,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（一）]]></title>
     <link href="http://www.m4ster.net/2014/12/25/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（一）/</id>
-    <published>2014-12-25T07:03:03.000Z</published>
+    <published>2014-12-25T09:03:03.000Z</published>
     <updated>2014-12-26T07:57:18.000Z</updated>
     <content type="html"><![CDATA[<h2 id="跨站脚本介绍">跨站脚本介绍</h2>
 <p>XSS自1996年诞生以来，如今已经过十余年的演化。随着Web技术的蓬勃发展，XSS无疑已经变成了最流行和严重的Web安全漏洞，更被OWASP（<code>Open Web Application Security Project</code>）组织评为十大安全漏洞中的第二威胁漏洞。</p>
@@ -680,7 +680,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（前言）]]></title>
     <link href="http://www.m4ster.net/2014/12/25/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%89%8D%E8%A8%80%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（前言）/</id>
-    <published>2014-12-25T06:32:28.000Z</published>
+    <published>2014-12-25T08:32:28.000Z</published>
     <updated>2014-12-25T09:41:50.000Z</updated>
     <content type="html"><![CDATA[<h2 id="前言">前言</h2>
 <p>近来在学习《XSS跨站脚本攻击剖析与防御》这本书，此书从XSS的基础攻击原理、危害以及一些常用的利用/防御的技巧再到高级利用方式衍生到Web 2.0的最大威胁——跨站脚本蠕虫，由浅入深的阐释了XSS对于网络安全意味着什么。在这里和大家分享下我的学习心得和知识的总结。</p>
