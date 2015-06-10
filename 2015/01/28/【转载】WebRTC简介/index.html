@@ -78,8 +78,8 @@ WebRTC是“网络实时通信”（Web Real Time Communication）的缩写。�
       <a href="http://www.m4ster.net" title="M4ster">M4ster</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-01-28T05:27:29.000Z" itemprop="datePublished">2015年01月28日</time>
-    更新日期:<time datetime="2015-01-28T18:00:51.000Z" itemprop="dateModified">2015年01月29日</time>
+    <time datetime="2015-01-28T03:27:29.000Z" itemprop="datePublished">2015年01月28日</time>
+    更新日期:<time datetime="2015-04-28T11:07:16.000Z" itemprop="dateModified">2015年04月28日</time>
     
   </p>
 </header>
@@ -173,7 +173,17 @@ WebRTC是“网络实时通信”（Web Real Time Communication）的缩写。�
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> peer = <span class="keyword">new</span> Peer(<span class="string">'someid'</span>, {key: <span class="string">'apikey'</span>});</div><div class="line">peer.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span><span class="params">(conn)</span> </span>{</div><div class="line">  conn.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span><span class="params">(data)</span></span>{</div><div class="line">    <span class="comment">// Will print 'hi!'</span></div><div class="line">    <span class="built_in">console</span>.log(data);</div><div class="line">  });</div><div class="line">});</div><div class="line"></div><div class="line"><span class="comment">// Connecting peer</span></div><div class="line"><span class="keyword">var</span> peer = <span class="keyword">new</span> Peer(<span class="string">'anotherid'</span>, {key: <span class="string">'apikey'</span>});</div><div class="line"><span class="keyword">var</span> conn = peer.connect(<span class="string">'someid'</span>);</div><div class="line">conn.on(<span class="string">'open'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">  conn.send(<span class="string">'hi!'</span>);</div><div class="line">});</div></pre></td></tr></table></figure>
 
 <h2 id="参考链接">参考链接</h2>
-<p>[1]Andi Smith，<a href="http://www.netmagazine.com/tutorials/get-started-webrtc" target="_blank" rel="external">Get Started with WebRTC</a><br>[2]Thibault Imbert, <a href="http://typedarray.org/from-microphone-to-wav-with-getusermedia-and-web-audio/" target="_blank" rel="external">From microphone to .WAV with: getUserMedia and Web Audio</a><br>[3]Ian Devlin, <a href="http://html5hub.com/using-the-getusermedia-api-with-the-html5-video-and-canvas-elements/#i.bz41ehmmhd3311" target="_blank" rel="external">Using the getUserMedia API with the HTML5 video and canvas elements</a><br>[4]Eric Bidelman, <a href="http://www.html5rocks.com/en/tutorials/getusermedia/intro/" target="_blank" rel="external">Capturing Audio &amp; Video in HTML5</a><br>[5]Sam Dutton, <a href="http://www.html5rocks.com/en/tutorials/webrtc/basics/" target="_blank" rel="external">Getting Started with WebRTC</a><br>[6]Dan Ristic, <a href="http://www.html5rocks.com/en/tutorials/webrtc/datachannels/" target="_blank" rel="external">WebRTC data channels</a><br>[7]Justin Uberti, Sam Dutton, <a href="http://io13webrtc.appspot.com/" target="_blank" rel="external">WebRTC: Plugin-free realtime communication</a><br>[8]Mozilla Developer Network, <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/WebRTC/Taking_webcam_photos" target="_blank" rel="external">Taking webcam photos</a><br>[9]Sam Dutton, <a href="http://www.html5rocks.com/en/tutorials/webrtc/infrastructure/" target="_blank" rel="external">WebRTC in the real world: STUN, TURN and signaling</a>  </p>
+<ul>
+<li>Andi Smith，<a href="http://www.netmagazine.com/tutorials/get-started-webrtc" target="_blank" rel="external">Get Started with WebRTC</a>  </li>
+<li>Thibault Imbert, <a href="http://typedarray.org/from-microphone-to-wav-with-getusermedia-and-web-audio/" target="_blank" rel="external">From microphone to .WAV with: getUserMedia and Web Audio</a>  </li>
+<li>Ian Devlin, <a href="http://html5hub.com/using-the-getusermedia-api-with-the-html5-video-and-canvas-elements/#i.bz41ehmmhd3311" target="_blank" rel="external">Using the getUserMedia API with the HTML5 video and canvas elements</a>  </li>
+<li>Eric Bidelman, <a href="http://www.html5rocks.com/en/tutorials/getusermedia/intro/" target="_blank" rel="external">Capturing Audio &amp; Video in HTML5</a>  </li>
+<li>Sam Dutton, <a href="http://www.html5rocks.com/en/tutorials/webrtc/basics/" target="_blank" rel="external">Getting Started with WebRTC</a>  </li>
+<li>Dan Ristic, <a href="http://www.html5rocks.com/en/tutorials/webrtc/datachannels/" target="_blank" rel="external">WebRTC data channels</a>  </li>
+<li>Justin Uberti, Sam Dutton, <a href="http://io13webrtc.appspot.com/" target="_blank" rel="external">WebRTC: Plugin-free realtime communication</a>  </li>
+<li>Mozilla Developer Network, <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/WebRTC/Taking_webcam_photos" target="_blank" rel="external">Taking webcam photos</a>  </li>
+<li>Sam Dutton, <a href="http://www.html5rocks.com/en/tutorials/webrtc/infrastructure/" target="_blank" rel="external">WebRTC in the real world: STUN, TURN and signaling</a>  </li>
+</ul>
 <h2 id="来源">来源</h2>
 <blockquote>
 <p><a href="http://javascript.ruanyifeng.com/htmlapi/webrtc.html" target="_blank" rel="external">http://javascript.ruanyifeng.com/htmlapi/webrtc.html</a></p>
@@ -206,6 +216,14 @@ WebRTC是“网络实时通信”（Web Real Time Communication）的缩写。�
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2015/06/10/华为内部的Web安全原则/" title="华为内部的Web安全原则">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  华为内部的Web安全原则</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2015/01/28/使用JavaScript获取本地和公网IP/"  title="使用JavaScript获取本地和公网IP">

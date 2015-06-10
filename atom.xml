@@ -4,7 +4,7 @@
   <subtitle><![CDATA[分享学习和生活中的点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.m4ster.net/"/>
-  <updated>2015-03-06T02:50:54.533Z</updated>
+  <updated>2015-06-10T10:14:50.471Z</updated>
   <id>http://www.m4ster.net/</id>
   
   <author>
@@ -15,11 +15,201 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[华为内部的Web安全原则]]></title>
+    <link href="http://www.m4ster.net/2015/06/10/%E5%8D%8E%E4%B8%BA%E5%86%85%E9%83%A8%E7%9A%84Web%E5%AE%89%E5%85%A8%E5%8E%9F%E5%88%99/"/>
+    <id>http://www.m4ster.net/2015/06/10/华为内部的Web安全原则/</id>
+    <published>2015-06-10T09:49:42.000Z</published>
+    <updated>2015-06-10T10:13:55.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Web安全原则">Web安全原则</h2>
+<p>1、认证模块必须采用防暴力破解机制，例如：验证码或者多次连续尝试登录失败后锁定帐号或IP。<br>说明：如采用多次连续尝试登录失败后锁定帐号或IP的方式，需支持连续登录失败锁定策略的“允许连续失败的次数”可配置，支持在锁定时间超时后自动解锁。  </p>
+<p>2、对于每一个需要授权访问的页面或servlet的请求都必须核实用户的会话标识是否合法、用户是否被授权执行这个操作，以防止URL越权。<br>说明：防止用户通过直接输入URL，进行URL越权，请求并执行一些页面或servlet；建议通过过滤器实现。  </p>
+<p>3、登录过程中，往服务器端传递用户名和口令时，必须采用HTTPS安全协议（也就是带服务器端证书的SSL）。只提供本机接入、登录，做设备管理使用的场景暂时不要求。<br>说明：如果在客户端和服务器间传递如帐号、口令等敏感数据，必须使用带服务器端证书的SSL。由于SSL对服务端的CPU资源消耗很大，实施时必须考虑服务器的承受能力。  </p>
+<p>4、对用户的最终认证处理过程必须放到服务器进行。</p>
+<p>5、用户产生的数据必须在服务端进行校验；数据在输出到客户端前必须先进行HTML编码，以防止执行恶意代码、跨站脚本攻击。对于不可信的数据，输出到客户端前必须先进行 HTML 编码。  </p>
+<p>6、使用主流Web安全扫描工具扫描Web服务器和Web应用，不存在“高”级别的漏洞。  </p>
+<p>7、非嵌入式产品的Web应用，应使用预编译语句PreparedStatement代替直接的语句执行Statement，以防止SQL注入。  </p>
+<h2 id="数据库安全">数据库安全</h2>
+<blockquote>
+<p>外购数据库、开源数据库、公司自研数据库都应进行安全配置，保证不出现安全漏洞。</p>
+</blockquote>
+<p>1、数据库口令禁止使用数据库厂商的缺省口令，且口令复杂度需满足“口令安全要求”。数据库若存在多个默认帐号，须将不使用的帐号禁用或删除。</p>
+<p>2、使用单独的操作系统帐号来运行数据库；数据库中的敏感文件（如：Oracle数据库的init.ora、listener.ora等）需要严格控制访问权限，只能被数据库进程运行帐户和DBA帐户读写；<br>对数据库帐户授予的权限进行严格清晰的划分，所有数据库帐户只能具备执行其任务的最小权限；对于有监听器功能的数据库（如Oracle的listener.ora）需要设置监听器密码或者设置为本地操作系统验证。</p>
+<p>3、使用主流或公司指定的系统扫描软件进行安全扫描，不存在“高”级别的漏洞。</p>
+<h2 id="敏感数据保护">敏感数据保护</h2>
+<blockquote>
+<p>系统对敏感数据的存储、传输和处理需保证数据安全，并遵从适用国家和地区的法律和法规要求。</p>
+</blockquote>
+<p><strong>敏感数据定义：</strong>包括但不限于口令、银行账号、个人数据（单独使用该数据或者结合其他信息可以识别某个活着的自然人的数据，包括：最终用户姓名、帐号、主叫和被叫号码、通信记录、话单、通信时间、定位数据等）。</p>
+<p>1、口令不允许明文存储在系统中，应该加密保护。在不需要还原口令的场景，必须使用不可逆算法加密。对银行账号等敏感数据的访问要有认证、授权和加密机制。口令文件必须设置访问权限控制，普通用户不能读取或拷贝加密的内容。如果帐户文件/数据中含有口令又必须所有用户可访问，则需将帐户文件/数据与口令文件/数据分开。<br>注：对于业界第三方主流软硬件（如操作系统、数据库、Web容器）自身提供的口令功能，不受本条限制。</p>
+<p>2、在非信任网络之间进行敏感数据（包括口令，银行帐号，批量个人数据等）的传输须采用安全传输通道或者加密后传输，有标准协议规定除外。</p>
+<p>3、禁止使用私有加密算法。说明：  </p>
+<ul>
+<li>对称加密算法建议使用：AES192及以上强度；</li>
+<li>密钥交换算法建议使用：DH1024；</li>
+<li>数字签名算法建议使用：DSA1024、ECDSA192；</li>
+<li>非对称算法建议使用：RSA2048、ECC192；</li>
+<li>HASH（哈希）算法建议使用：SHA256及以上强度；</li>
+<li>HMAC（基于哈希的消息验证码）算法建议使用：HMAC-SHA256；  </li>
+</ul>
+<p>4、用于敏感数据传输加密的密钥，不能硬编码在代码中。<br>在敏感数据的安全传输上，优先使用业界的标准安全协议（如SSH v2/TLS1.0/SSL3.0/IPSec/SFTP/HTTPS等），并确保密钥可配置；如果是由产品自身实现安全传输过程，则优先使用Diffie-Hellman密钥交换算法，如果使用预置共享密钥等其他方法，也必须保证该密钥可配置和可替换。</p>
+<p>5、禁止在日志、话单等文件中记录口令、银行账号、通信内容等敏感数据；</p>
+<p>6、尽量避免在日志、话单中记录个人数据，如果必须记录个人数据，则所有数据必须进行结构化存储或适合于进行匿名化提取；  </p>
+<ul>
+<li>尽量避免在日志中记录个人数据，如果必须记录，在个人数据之前或之后加统一的标记，以区别于其他非个人数据；</li>
+<li>尽量避免在话单中记录个人数据，如果必须记录，则话单必须进行结构化存储，字段间必须由统一的分隔符分开，每行的字段按列严格对应；</li>
+</ul>
+<p>7、有个人数据导出功能的产品发布时必须同时提供对个人数据进行过滤或匿名化处理和功能或工具；</p>
+<p>8、严格限制导出功能的权限，对导出功能的使用必须有日志记录；</p>
+<p>9、涉及个人数据的采集/处理的功能须提供安全保护机制（如认证、权限控制、日志记录等），并通过产品资料向客户公开；</p>
+<p>10、在正常业务流程和标准协议之外，禁止出于故障定位目的进行用户精确位置信息定位。如需处理用户精确位置数据，应有公司的明确需求，并在方案设计时，给予用户随时撤回同意的机会。</p>
+<h2 id="口令安全策略管理">口令安全策略管理</h2>
+<p>1、设置口令时，默认检测口令复杂度，口令至少满足如下要求：</p>
+<ul>
+<li><p>1) 口令长度至少6个字符（特权用户至少8个字符）；</p>
+</li>
+<li><p>2) 口令必须包含如下至少两种字符的组合:</p>
+<ul>
+<li>至少一个小写字母；</li>
+<li>至少一个大写字母；</li>
+<li>至少一个数字；</li>
+<li>至少一个特殊字符：`~!@#$%^&amp;*()-_=+|[{}];:’”,&lt;.&gt;/? 和空格</li>
+</ul>
+</li>
+<li><p>3) 口令不能和帐号或者帐号的逆序相同；</p>
+</li>
+<li>4) 若设置的口令不符合上述规则，必须进行警告。</li>
+</ul>
+<p>2、系统必须提供锁定用户的机制。可选择如下两种方式之一：</p>
+<ul>
+<li><p>方式一：当重复输入错误口令次数（默认3次，次数系统可以设置）超过系统限制时，系统要锁定该用户。</p>
+</li>
+<li><p>方式二：系统还可以设置下次允许输入口令的间隔时间加倍，采用这种方式时，用户可以不设置自动锁定。</p>
+</li>
+</ul>
+<p>3、可设置自动解锁时间（只适用于由于口令尝试被锁定的用户）</p>
+<ul>
+<li><p>1) 对于口令尝试N次失败被锁定的用户，系统要能够设置自动解锁时间，建议默认解锁时间为5分钟。</p>
+</li>
+<li><p>2) 用户被锁时间达到预定义时间，可自动解锁该用户，或者也可通过安全管理员手工解锁该用户。</p>
+</li>
+<li><p>3) 在锁定时间内，仅能允许应用安全管理员角色所属帐号手动解锁该用户。</p>
+</li>
+</ul>
+<p>4、操作界面中的口令不能明文显示，键入口令时不能明文显示出来(操作界面中的输入口令可不显示或用*代替)，包括在终端上打印或存储在日志中时也不能明文显示口令，即使是内存中的明文口令（如登录期间），也应在使用后立即覆盖。</p>
+<p>5、口令输入框不支持拷贝功能。</p>
+<p>6、对于系统内置帐号的缺省口令，口令应符合复杂度的要求，并在客户资料中提醒用户修改。</p>
+<p>7、用户可修改自己的口令，需满足如下要求：</p>
+<ul>
+<li><p>1) 用户修改自己口令时必须验证旧口令；</p>
+</li>
+<li><p>2) 不允许修改除自身帐号以外的帐号的口令（管理员除外）</p>
+</li>
+</ul>
+<p>8、口令不能在网络中明文传输，口令等认证凭证在传输过程中必须加密，使用高安全等级的加密算法。说明：</p>
+<ul>
+<li><p>1) 对称加密算法建议使用：AES192及以上强度；</p>
+</li>
+<li><p>2) 密钥交换算法建议使用：DH1024；</p>
+</li>
+<li><p>3) 数字签名算法建议使用：DSA1024、ECDSA192；</p>
+</li>
+<li><p>4) 非对称算法建议使用：RSA2048、ECC192；</p>
+</li>
+<li><p>5) HASH（哈希）算法建议使用：SHA256及以上强度；</p>
+</li>
+<li><p>6) HMAC（基于哈希的消息验证码）算法建议使用：HMAC-SHA256；</p>
+</li>
+</ul>
+<p>9、口令在本地存储时必须加密，需满足如下要求：</p>
+<ul>
+<li><p>1) 口令不能够明文写入日志文件、配置文件以及cookie中；</p>
+</li>
+<li><p>2) 口令文件必须设置访问控制，普通用户不能读取或拷贝加密的内容。</p>
+</li>
+</ul>
+<p>10、产品配套资料提供清晰的帐号、口令清单。说明：</p>
+<ul>
+<li>提供给用户的清单模板</li>
+</ul>
+<h2 id="安全资料">安全资料</h2>
+<p>针对售前、开局、现网运维几个阶段，提供配套安全方案、资料。</p>
+<p>1、在产品描述中对产品安全特性进行描述。</p>
+<p>2、产品发布前提供产品通信矩阵。描述机器/网元/模块间的通信关系，包括：通信使用的端口、协议、IP地址、认证方式、端口用途信息等。</p>
+<p>说明：公司提供通信矩阵模板。</p>
+<p>3、产品发布前提供防病毒软件部署指南。描述防病毒软件部署前的准备、流程、执行步骤、失败后回退处理，以及病毒特征库升级配置指导（Windows系统平台必选）。</p>
+<p>4、产品发布前提供安全配置/加固指南。描述如下内容：</p>
+<ul>
+<li>安全加固及检查，主要包括操作系统、数据库或WEB服务器等加固内容，需要包含具体的加固内容和操作步骤（必选）。</li>
+<li>应用的安全配置，针对产品业务安全应用，需要启用哪些安全选项，配置哪些内容。（对于需要通过对产品开局时进行安全策略配置才能生效的安全功能，需要提供此部分内容）。如果没有应用的安全配置，命名为安全加固指南。安全加固指南是必须的。</li>
+</ul>
+<p>5、产品发布前提供安全维护手册。从解决方案角度提供业务日常安全维护方面的指导，包括安全补丁、安全配置、防病毒软件例行检查等，指导维护人员例行进行安全维护。</p>
+<h2 id="操作系统安全">操作系统安全</h2>
+<p>无论是使用通用操作系统（Windows、Linux、Unix等）还是嵌入式操作系统（如VxWorks、pSOS等)，系统都应该保证软件及软件运行环境的安全。</p>
+<p>注：系统指交付给客户运行的整体系统，包括自研的软件、软件运行的操作系统及应用服务在内。</p>
+<p>1、使用主流漏洞扫描软件进行安全扫描，不存在高风险级别的漏洞。</p>
+<p>2、基于通用操作系统的新发货产品“操作系统加固+操作系统补丁”预装率=100%；对于不在生产环节预安装的产品，需要在正式发布的版本中包含默认的安全策略文件，并在产品资料中说明加固要求和操作步骤。说明：</p>
+<ul>
+<li><p>1）公司提供的操作系统，产品版本应基于最新的操作系统安全补丁进行开发和兼容性测试。</p>
+</li>
+<li><p>2）合作方提供的操作系统，合作方需在版本交付前对操作系统安全补丁进行兼容性测试并随版本发布，并根据CIS标准对操作系统进行加固并随版本发布。</p>
+</li>
+</ul>
+<p>3、使用Windows操作系统的产品，产品需要使用主流防病毒软件进行进行兼容性测试。说明：</p>
+<ul>
+<li><p>1）公司提供的Windows操作系统，合作方需使用主流防病毒软件或公司指定的防病毒软件进行兼容性测试；</p>
+</li>
+<li><p>2）合作方提供的Windows操作系统，产品需要缺省配套公司指定的防病毒软件，并对防病毒软件进行兼容性测试。</p>
+</li>
+</ul>
+<h2 id="协议与接口防攻击">协议与接口防攻击</h2>
+<p>系统应具备基本的防攻击能力，对影响自身的常见攻击具备防御能力等。注：系统指交付给客户运行的整体系统，包括自研的软件、软件运行的操作系统及应用服务在内。</p>
+<p>1、系统所有的对外通信连接必须是系统运行和维护必需的，对使用到的通信端口在产品通信矩阵文档中说明，动态侦听端口必须限定确定的合理的范围。通过端口扫描工具验证，未在通信矩阵中列出的端口必须关闭。说明：</p>
+<ul>
+<li>1）公司提供通信矩阵模板。</li>
+</ul>
+<p>2.尽量避免使用动态侦定端口的实现方式，在没有替代方案的情况下，如果必须使用，需满足如下要求：</p>
+<ul>
+<li><p>1)、如果使用业界标准的协议（如RPC、FTP被动模式），并有一定的安全措施（如NFS安全配置、防火墙支持FTP被动模式等）；</p>
+</li>
+<li><p>2)、如果自实现的方式，则动态侦听端口必须限定确定的合理的范围。</p>
+</li>
+</ul>
+<p>3、所有能对系统进行管理的通信端口及协议必须有接入认证机制，标准协议没有认证机制的除外。</p>
+<p>4、对自研协议和业界非主流软件（包括非主流的开源软件）实现的协议要进行协议畸形报文攻击测试。</p>
+<p>5、设备外部可见的能对系统进行管理的物理接口必须有接入认证机制。</p>
+<h2 id="监听接口及防止非法监听">监听接口及防止非法监听</h2>
+<p>产品开发合法监听接口应遵循国际标准及所在国的法律要求。</p>
+<p>1、在没有公司明确需求的情况下，严禁开发具有监听性质的功能和接口，无论该功能和接口是否要遵循相应的国家标准和国际标准。</p>
+<p>2、在公司对合法监听接口有需求的情况下，合作方需根据公司提供的监听功能或接口的文件中的要求开发。说明：</p>
+<ul>
+<li><p>对提供合法监听接口的产品版本的要求（二选一）</p>
+</li>
+<li><p>1）产品提供两个版本的软件安装包：一个支持合法监听，一个不支持合法监听。根据市场的安全要求，选择对应的软件安装包进行部署。</p>
+</li>
+<li><p>2）产品提供软件安装包拆分为：基本软件安装包和合法监听插件安装包。根据市场的安全要求，选择是否安装合法监听插件安装包。</p>
+</li>
+</ul>
+<p>3、在正常业务流程和标准协议之外，禁止提供采集最终用户原始通信内容（语音类、短信/彩信类、传真类、数据业务类）的功能，即使出于保障网络运营和服务目的。注：</p>
+<ul>
+<li><p>1) 除了语音类、短信/彩信类、传真类、数据业务类信息属于通信内容外，最终用户的即时消息、E-Mail信息、URL同样属于通信内容；</p>
+</li>
+<li><p>2) 允许使用debug功能，但debug信息中不允许包含口令、银行账号、通信内容等敏感数据。</p>
+</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Web安全原则">Web安全原则</h2>
+<p>1、认证模块必须采用防暴力破解机制，例如：验证码或者多次连续尝试登录失败后锁定帐号或IP。<br>说明：如采用多次连续尝试登录失败后锁定帐号或IP的方式，需支持连续登录失败锁定策略的“允许连续失败的次数”可配置，支]]>
+    </summary>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[【转载】WebRTC简介]]></title>
     <link href="http://www.m4ster.net/2015/01/28/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91WebRTC%E7%AE%80%E4%BB%8B/"/>
     <id>http://www.m4ster.net/2015/01/28/【转载】WebRTC简介/</id>
-    <published>2015-01-28T05:27:29.000Z</published>
-    <updated>2015-01-28T18:00:51.000Z</updated>
+    <published>2015-01-28T03:27:29.000Z</published>
+    <updated>2015-04-28T11:07:16.000Z</updated>
     <content type="html"><![CDATA[<h2 id="概述">概述</h2>
 <p>WebRTC是“网络实时通信”（Web Real Time Communication）的缩写。它最初是为了解决浏览器上视频通话而提出的，即两个浏览器之间直接进行视频和音频的通信，不经过服务器。后来发展到除了音频和视频，还可以传输文字和其他数据。<br>Google是WebRTC的主要支持者和开发者，它最初在Gmail上推出了视频聊天，后来在2011年推出了Hangouts，语音在浏览器中打电话。它推动了WebRTC标准的确立。<br>WebRTC主要让浏览器具备三个作用。  </p>
 <blockquote>
@@ -102,7 +292,17 @@
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> peer = <span class="keyword">new</span> Peer(<span class="string">'someid'</span>, {key: <span class="string">'apikey'</span>});</div><div class="line">peer.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span><span class="params">(conn)</span> </span>{</div><div class="line">  conn.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span><span class="params">(data)</span></span>{</div><div class="line">    <span class="comment">// Will print 'hi!'</span></div><div class="line">    <span class="built_in">console</span>.log(data);</div><div class="line">  });</div><div class="line">});</div><div class="line"></div><div class="line"><span class="comment">// Connecting peer</span></div><div class="line"><span class="keyword">var</span> peer = <span class="keyword">new</span> Peer(<span class="string">'anotherid'</span>, {key: <span class="string">'apikey'</span>});</div><div class="line"><span class="keyword">var</span> conn = peer.connect(<span class="string">'someid'</span>);</div><div class="line">conn.on(<span class="string">'open'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">  conn.send(<span class="string">'hi!'</span>);</div><div class="line">});</div></pre></td></tr></table></figure>
 
 <h2 id="参考链接">参考链接</h2>
-<p>[1]Andi Smith，<a href="http://www.netmagazine.com/tutorials/get-started-webrtc" target="_blank" rel="external">Get Started with WebRTC</a><br>[2]Thibault Imbert, <a href="http://typedarray.org/from-microphone-to-wav-with-getusermedia-and-web-audio/" target="_blank" rel="external">From microphone to .WAV with: getUserMedia and Web Audio</a><br>[3]Ian Devlin, <a href="http://html5hub.com/using-the-getusermedia-api-with-the-html5-video-and-canvas-elements/#i.bz41ehmmhd3311" target="_blank" rel="external">Using the getUserMedia API with the HTML5 video and canvas elements</a><br>[4]Eric Bidelman, <a href="http://www.html5rocks.com/en/tutorials/getusermedia/intro/" target="_blank" rel="external">Capturing Audio &amp; Video in HTML5</a><br>[5]Sam Dutton, <a href="http://www.html5rocks.com/en/tutorials/webrtc/basics/" target="_blank" rel="external">Getting Started with WebRTC</a><br>[6]Dan Ristic, <a href="http://www.html5rocks.com/en/tutorials/webrtc/datachannels/" target="_blank" rel="external">WebRTC data channels</a><br>[7]Justin Uberti, Sam Dutton, <a href="http://io13webrtc.appspot.com/" target="_blank" rel="external">WebRTC: Plugin-free realtime communication</a><br>[8]Mozilla Developer Network, <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/WebRTC/Taking_webcam_photos" target="_blank" rel="external">Taking webcam photos</a><br>[9]Sam Dutton, <a href="http://www.html5rocks.com/en/tutorials/webrtc/infrastructure/" target="_blank" rel="external">WebRTC in the real world: STUN, TURN and signaling</a>  </p>
+<ul>
+<li>Andi Smith，<a href="http://www.netmagazine.com/tutorials/get-started-webrtc" target="_blank" rel="external">Get Started with WebRTC</a>  </li>
+<li>Thibault Imbert, <a href="http://typedarray.org/from-microphone-to-wav-with-getusermedia-and-web-audio/" target="_blank" rel="external">From microphone to .WAV with: getUserMedia and Web Audio</a>  </li>
+<li>Ian Devlin, <a href="http://html5hub.com/using-the-getusermedia-api-with-the-html5-video-and-canvas-elements/#i.bz41ehmmhd3311" target="_blank" rel="external">Using the getUserMedia API with the HTML5 video and canvas elements</a>  </li>
+<li>Eric Bidelman, <a href="http://www.html5rocks.com/en/tutorials/getusermedia/intro/" target="_blank" rel="external">Capturing Audio &amp; Video in HTML5</a>  </li>
+<li>Sam Dutton, <a href="http://www.html5rocks.com/en/tutorials/webrtc/basics/" target="_blank" rel="external">Getting Started with WebRTC</a>  </li>
+<li>Dan Ristic, <a href="http://www.html5rocks.com/en/tutorials/webrtc/datachannels/" target="_blank" rel="external">WebRTC data channels</a>  </li>
+<li>Justin Uberti, Sam Dutton, <a href="http://io13webrtc.appspot.com/" target="_blank" rel="external">WebRTC: Plugin-free realtime communication</a>  </li>
+<li>Mozilla Developer Network, <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/WebRTC/Taking_webcam_photos" target="_blank" rel="external">Taking webcam photos</a>  </li>
+<li>Sam Dutton, <a href="http://www.html5rocks.com/en/tutorials/webrtc/infrastructure/" target="_blank" rel="external">WebRTC in the real world: STUN, TURN and signaling</a>  </li>
+</ul>
 <h2 id="来源">来源</h2>
 <blockquote>
 <p><a href="http://javascript.ruanyifeng.com/htmlapi/webrtc.html" target="_blank" rel="external">http://javascript.ruanyifeng.com/htmlapi/webrtc.html</a></p>
@@ -123,7 +323,7 @@
     <title><![CDATA[使用JavaScript获取本地和公网IP]]></title>
     <link href="http://www.m4ster.net/2015/01/28/%E4%BD%BF%E7%94%A8JavaScript%E8%8E%B7%E5%8F%96%E6%9C%AC%E5%9C%B0%E5%92%8C%E5%85%AC%E7%BD%91IP/"/>
     <id>http://www.m4ster.net/2015/01/28/使用JavaScript获取本地和公网IP/</id>
-    <published>2015-01-28T04:44:50.000Z</published>
+    <published>2015-01-28T02:44:50.000Z</published>
     <updated>2015-01-30T02:00:43.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>前些天老外发出了一个脚本，可以使用JavaScript获取真实的内网IP和外网IP。</p>
@@ -212,7 +412,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（六）]]></title>
     <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（六）/</id>
-    <published>2014-12-30T09:05:37.000Z</published>
+    <published>2014-12-30T07:05:37.000Z</published>
     <updated>2014-12-30T16:27:32.000Z</updated>
     <content type="html"><![CDATA[<h2 id="黑盒手动测试">黑盒手动测试</h2>
 <p>在黑盒环境下，除了使用Web安全检测工具进行自动化测试，还可以依靠人工形式发掘跨站脚本漏洞。<br>针对页面的输入框进行测试，可以输入一些能触发XSS的敏感字符，如：  </p>
@@ -252,7 +452,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（五）]]></title>
     <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（五）/</id>
-    <published>2014-12-30T08:27:37.000Z</published>
+    <published>2014-12-30T06:27:37.000Z</published>
     <updated>2014-12-30T07:03:07.000Z</updated>
     <content type="html"><![CDATA[<h2 id="网络钓鱼">网络钓鱼</h2>
 <p>网络钓鱼是一种利用网络进行诈骗的手段，主要通过对受害者心理弱点、好奇心、信任度等心理陷阱来实现诈骗，属于社会工程学的一种。</p>
@@ -296,7 +496,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（四）]]></title>
     <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（四）/</id>
-    <published>2014-12-30T07:32:15.000Z</published>
+    <published>2014-12-30T05:32:15.000Z</published>
     <updated>2014-12-30T06:26:54.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Cookie基础介绍">Cookie基础介绍</h2>
 <p>Cookie是用户浏览网页时网站存储在用户机器上的小文本文件，文件里记录了与用户相关的一些状态或设置，比如用户名、ID、访问次数等。当用户下一次访问这个网站的时候，网站会先访问用户机器上对应的该网站的Cookie文件，并从中读取信息，以便用户实现快速访问。</p>
@@ -336,7 +536,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（三）]]></title>
     <link href="http://www.m4ster.net/2014/12/30/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/30/《XSS跨站脚本攻击剖析与防御》学习笔记（三）/</id>
-    <published>2014-12-30T03:49:29.000Z</published>
+    <published>2014-12-30T01:49:29.000Z</published>
     <updated>2014-12-30T03:31:29.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Shellcode">Shellcode</h2>
 <p>在跨站脚本当中，是指JS等脚本编写的XSS利用代码</p>
@@ -400,7 +600,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（二）]]></title>
     <link href="http://www.m4ster.net/2014/12/26/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/26/《XSS跨站脚本攻击剖析与防御》学习笔记（二）/</id>
-    <published>2014-12-26T09:57:01.000Z</published>
+    <published>2014-12-26T07:57:01.000Z</published>
     <updated>2014-12-26T10:20:10.000Z</updated>
     <content type="html"><![CDATA[<h2 id="XSS构造剖析">XSS构造剖析</h2>
 <blockquote>
@@ -529,7 +729,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[XSS跨站测试语句：XSS Cheat Sheet]]></title>
     <link href="http://www.m4ster.net/2014/12/25/XSS%E8%B7%A8%E7%AB%99%E6%B5%8B%E8%AF%95%E8%AF%AD%E5%8F%A5%EF%BC%9AXSS-Cheat-Sheet/"/>
     <id>http://www.m4ster.net/2014/12/25/XSS跨站测试语句：XSS-Cheat-Sheet/</id>
-    <published>2014-12-25T15:29:09.000Z</published>
+    <published>2014-12-25T13:29:09.000Z</published>
     <updated>2014-12-25T13:36:14.000Z</updated>
     <content type="html"><![CDATA[<h2 id="XSS_Cheat_Sheet">XSS Cheat Sheet</h2>
 <blockquote>
@@ -559,7 +759,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（一）]]></title>
     <link href="http://www.m4ster.net/2014/12/25/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（一）/</id>
-    <published>2014-12-25T09:03:03.000Z</published>
+    <published>2014-12-25T07:03:03.000Z</published>
     <updated>2014-12-26T07:57:18.000Z</updated>
     <content type="html"><![CDATA[<h2 id="跨站脚本介绍">跨站脚本介绍</h2>
 <p>XSS自1996年诞生以来，如今已经过十余年的演化。随着Web技术的蓬勃发展，XSS无疑已经变成了最流行和严重的Web安全漏洞，更被OWASP（<code>Open Web Application Security Project</code>）组织评为十大安全漏洞中的第二威胁漏洞。</p>
@@ -680,7 +880,7 @@ getIPs(<span class="function"><span class="keyword">function</span><span class="
     <title><![CDATA[《XSS跨站脚本攻击剖析与防御》学习笔记（前言）]]></title>
     <link href="http://www.m4ster.net/2014/12/25/%E3%80%8AXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%E5%89%96%E6%9E%90%E4%B8%8E%E9%98%B2%E5%BE%A1%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%89%8D%E8%A8%80%EF%BC%89/"/>
     <id>http://www.m4ster.net/2014/12/25/《XSS跨站脚本攻击剖析与防御》学习笔记（前言）/</id>
-    <published>2014-12-25T08:32:28.000Z</published>
+    <published>2014-12-25T06:32:28.000Z</published>
     <updated>2014-12-25T09:41:50.000Z</updated>
     <content type="html"><![CDATA[<h2 id="前言">前言</h2>
 <p>近来在学习《XSS跨站脚本攻击剖析与防御》这本书，此书从XSS的基础攻击原理、危害以及一些常用的利用/防御的技巧再到高级利用方式衍生到Web 2.0的最大威胁——跨站脚本蠕虫，由浅入深的阐释了XSS对于网络安全意味着什么。在这里和大家分享下我的学习心得和知识的总结。</p>
